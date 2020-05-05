@@ -39,9 +39,17 @@ module.exports = {
             name: 'Projects',
             path: '/Projects'
         },
+        project: {
+            name: 'Project',
+            path: '/Project'
+        },
         issues: {
             name: 'Issues',
             path: '/Issues'
+        },
+        issue: {
+            name: 'Issue',
+            path: '/Issue'
         },
         timelogs: {
             name: 'Timelogs',
@@ -69,6 +77,11 @@ module.exports = {
         STATUSES.INACTIVE,
         STATUSES.ACTIVE,
         STATUSES.OBSOLETE
+    ],
+    issueStatuses: [
+        STATUSES.NEW,
+        STATUSES.PROGRESS,
+        STATUSES.CLOSED
     ],
     severity: {
         success: "success",

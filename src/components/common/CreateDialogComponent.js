@@ -15,7 +15,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const DialogComponent = (props) => {
+const CreateDialogComponent = (props) => {
 
     const classes = useStyles();
 
@@ -40,9 +40,9 @@ const DialogComponent = (props) => {
     );
 }
 
-DialogComponent.propTypes = {
+CreateDialogComponent.propTypes = {
     title: PropTypes.string.isRequired,
 };
 
-export default DialogComponent;
+export default CreateDialogComponent;
 

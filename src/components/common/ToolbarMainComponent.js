@@ -1,12 +1,13 @@
 import React from 'react';
 // import { Link as LinkRouter } from "react-router-dom";
+import Hidden from '@material-ui/core/Hidden';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
-import InputBase from '@material-ui/core/InputBase';
+// import InputBase from '@material-ui/core/InputBase';
 import { fade, makeStyles } from '@material-ui/core/styles';
 import MenuIcon from '@material-ui/icons/Menu';
-import SearchIcon from '@material-ui/icons/Search';
+// import SearchIcon from '@material-ui/icons/Search';
 import Button from '@material-ui/core/Button';
 import { useHistory } from "react-router-dom";
 
@@ -19,8 +20,9 @@ const useStyles = makeStyles((theme) => ({
         flexGrow: 1,
         marginBottom: theme.spacing(1),
     },
-    menuButton: {
+    menuButton: {        
         marginRight: theme.spacing(2),
+        justifyContent: 'end'
     },
     title: {
         flexGrow: 1,
@@ -78,14 +80,6 @@ export default function ToolbarComponent() {
         <div className={classes.root}>
             <AppBar position="static">
                 <Toolbar variant="dense">
-                    <IconButton
-                        edge="start"
-                        className={classes.menuButton}
-                        color="inherit"
-                        aria-label="open drawer"
-                    >
-                        <MenuIcon />
-                    </IconButton>
 
                     <Button color="inherit" onClick={() => { history.push(nav.home.path) }}>
                         {nav.home.name}
@@ -98,28 +92,38 @@ export default function ToolbarComponent() {
                     <Button color="inherit" onClick={() => { history.push(nav.issues.path) }}>
                         {nav.issues.name}
                     </Button>
+                    <Hidden xsDown>
+                        <Button color="inherit" onClick={() => { history.push(nav.timelogs.path) }}>
+                            {nav.timelogs.name}
+                        </Button>
 
-                    <Button color="inherit" onClick={() => { history.push(nav.timelogs.path) }}>
-                        {nav.timelogs.name}
-                    </Button>
+                        <Button color="inherit" onClick={() => { history.push(nav.projections.path) }}>
+                            {nav.projections.name}
+                        </Button>
+                        <Button color="inherit" onClick={() => { history.push(nav.versions.path) }}>
+                            {nav.versions.name}
+                        </Button>
+                        <Button color="inherit" onClick={() => { history.push(nav.stories.path) }}>
+                            {nav.stories.name}
+                        </Button>
+                    </Hidden>
+                    <Hidden smDown>
+                        <Button color="inherit" onClick={() => { history.push(nav.tasks.path) }}>
+                            {nav.tasks.name}
+                        </Button>
+                    </Hidden>
+                    <Hidden mdUp>
+                        <IconButton
+                            edge="start"
+                            className={classes.menuButton}
+                            color="inherit"
+                            aria-label="open drawer"
+                        >
+                            <MenuIcon />
+                        </IconButton>
+                    </Hidden>
 
-                    <Button color="inherit" onClick={() => { history.push(nav.projections.path) }}>
-                        {nav.projections.name}
-                    </Button>
-
-                    <Button color="inherit" onClick={() => { history.push(nav.versions.path) }}>
-                        {nav.versions.name}
-                    </Button>
-
-                    <Button color="inherit" onClick={() => { history.push(nav.stories.path) }}>
-                        {nav.stories.name}
-                    </Button>
-
-                    <Button color="inherit" onClick={() => { history.push(nav.tasks.path) }}>
-                        {nav.tasks.name}
-                    </Button>
-
-                    <div className={classes.search}>
+                    {/* <div className={classes.search}>
                         <div className={classes.searchIcon}>
                             <SearchIcon />
                         </div>
@@ -131,7 +135,7 @@ export default function ToolbarComponent() {
                             }}
                             inputProps={{ 'aria-label': 'search' }}
                         />
-                    </div>
+                    </div> */}
                 </Toolbar>
             </AppBar>
         </div >

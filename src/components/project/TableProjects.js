@@ -1,5 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import { Link as LinkRouter } from "react-router-dom";
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -11,6 +12,8 @@ import Paper from '@material-ui/core/Paper';
 import ExternalLinkComponent from '../common/ExternalLinkComponent';
 import StatusComponent from '../common/StatusComponent';
 import DeleteFormProject from './DeleteFormProject';
+
+import { nav } from '../../config/constants';
 
 const useStyles = makeStyles(theme => ({
     headerTable: {
@@ -38,7 +41,11 @@ const TableProjects = ({ projects }) => {
                     <TableBody>
                         {projects.map(row => (
                             <TableRow key={row.id}>
-                                <TableCell component="th" scope="row">{row.code}</TableCell>
+                                <TableCell component="th" scope="row">
+                                    <LinkRouter to={`${nav.project.path}/${row.id}`} >
+                                        {row.code}
+                                    </LinkRouter>
+                                </TableCell>
                                 <TableCell>{row.name}</TableCell>
                                 <TableCell>{row.descr}</TableCell>
                                 <TableCell align="center">

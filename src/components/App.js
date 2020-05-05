@@ -1,4 +1,5 @@
 import React from 'react';
+import Container from '@material-ui/core/Container';
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import ApolloClient from 'apollo-boost';
 import { InMemoryCache } from 'apollo-cache-inmemory';
@@ -6,9 +7,10 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 import { ApolloProvider } from '@apollo/react-hooks';
 
 import { nav } from '../config/constants';
-import ToolbarComponent from './common/ToolbarComponent';
+import ToolbarMainComponent from './common/ToolbarMainComponent';
 import MessageBarComponent from './common/MessageBarComponent';
 import PageProjects from './project/PageProjects';
+import DetailProject from './project/DetailProject';
 import PageIssues from './issue/PageIssues';
 import PageTimelogs from './timelog/PageTimelogs';
 import PageProjections from './projection/PageProjections';
@@ -37,38 +39,44 @@ cache.writeData({
 function App() {
 
   return (
-    <ApolloProvider client={client}>
-      <BrowserRouter>
-        <ToolbarComponent />
-        <Switch>
-          <Route path={nav.home.path} exact>
-            <PageProjects />
-          </Route>
-          <Route path={nav.projects.path} exact>
-            <PageProjects />
-          </Route>
-          <Route path={nav.issues.path} exact>
-            <PageIssues />
-          </Route>
-          <Route path={nav.timelogs.path} exact>
-            <PageTimelogs />
-          </Route>
-          <Route path={nav.projections.path} exact>
-            <PageProjections />
-          </Route>
-          <Route path={nav.versions.path} exact>
-            <PageVersions />
-          </Route>
-          <Route path={nav.stories.path} exact>
-            <PageStories />
-          </Route>
-          <Route path={nav.tasks.path} exact>
-            <PageTasks />
-          </Route>
-        </Switch>
-      </BrowserRouter>
-      <MessageBarComponent />
-    </ApolloProvider>
+    <Container maxWidth='xl' disableGutters={true}>
+      <ApolloProvider client={client}>
+        <BrowserRouter>
+          <ToolbarMainComponent />
+          <Switch>
+            <Route path={nav.home.path} exact>
+              <PageProjects />
+            </Route>
+            <Route path={nav.projects.path} exact>
+              <PageProjects />
+            </Route>
+            <Route path={`${nav.project.path}/:id`}>
+              <DetailProject />
+            </Route>
+            <Route path={nav.issues.path} exact>
+              <PageIssues />
+            </Route>
+            <Route path={nav.timelogs.path} exact>
+              <PageTimelogs />
+            </Route>
+            <Route path={nav.projections.path} exact>
+              <PageProjections />
+            </Route>
+            <Route path={nav.versions.path} exact>
+              <PageVersions />
+            </Route>
+            <Route path={nav.stories.path} exact>
+              <PageStories />
+            </Route>
+            <Route path={nav.tasks.path} exact>
+              <PageTasks />
+            </Route>
+          </Switch>
+        </BrowserRouter>
+        <MessageBarComponent />
+
+      </ApolloProvider>
+    </Container>
   );
 }
 

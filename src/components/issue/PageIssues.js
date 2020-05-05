@@ -1,27 +1,13 @@
 import React from 'react';
 import { Query } from "react-apollo";
-import { gql } from "apollo-boost";
 
+import { GET_ISSUE_SET } from '../../config/gqls';
 import TableIssues from './TableIssues';
-
-const GET_TASK_SET = gql`
-    {
-        issues {
-            id
-            code
-            project_id
-            summary
-            descr
-            status
-            external_code
-        }  
-    }
-`
 
 const PageIssue = () => {
     return (
         <Query
-            query={GET_TASK_SET}
+            query={GET_ISSUE_SET}
             notifyOnNetworkStatusChange
         >
             {({ loading, error, data, refetch, networkStatus }) => {
