@@ -4,8 +4,6 @@ import { Query } from "react-apollo";
 import TableProjects from './TableProjects';
 import LoadingComponent from '../common/LoadingComponent';
 import ErrorServiceComponent from '../common/ErrorServiceComponent';
-import CreateDialogComponent from '../common/CreateDialogComponent';
-import CreateFormProject from './CreateFormProject';
 
 import { GET_PROJECT_SET } from '../../config/gqls';
 
@@ -29,10 +27,7 @@ const PageProject = () => {
                     );
                 }}
 
-            </Query>
-            <CreateDialogComponent title="Create a new Project">
-                <CreateFormProject />
-            </CreateDialogComponent>
+            </Query>            
         </>
 
     );

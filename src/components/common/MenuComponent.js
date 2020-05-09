@@ -36,17 +36,25 @@ const MenuComponent = ({ id, name, items }) => {
                 onClose={handleClose}
             >
                 {items.map((element) => (
-                    <MenuItem key={element.key} onClick={handleClose}>{element.name}</MenuItem>
+                    <MenuItem
+                        key={element.key}
+                        onClick={() => {
+                            handleClose();
+                            element.handle();
+                        }}
+                    >
+                        {element.name}
+                    </MenuItem>
                 ))}
             </Menu>
         </>
     );
 }
 
-// MenuComponent.PropTypes = {
-//     id: PropTypes.string,
-//     name: PropTypes.string,
-//     items: PropTypes.array,
-// }
+MenuComponent.propTypes = {
+    id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    items: PropTypes.array.isRequired,
+}
 
 export default MenuComponent;

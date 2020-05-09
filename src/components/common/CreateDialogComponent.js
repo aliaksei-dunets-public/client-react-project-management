@@ -23,7 +23,7 @@ const CreateDialogComponent = (props) => {
 
     const handleCloseDialog = () => setOpen(false);
 
-    const childrenWithState = React.cloneElement(props.children, { handleCloseDialog })
+    const childrenWithState = React.cloneElement(props.children, { handleCloseDialog });
 
     return (
         <>

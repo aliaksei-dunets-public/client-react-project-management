@@ -7,8 +7,8 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 
 import { Mutation } from '@apollo/react-components';
-import { projectStatuses, severity } from '../../config/constants';
-import { GET_PROJECT_SET, CREATE_PROJECT } from '../../config/gqls';
+import { projectStatuses } from '../../config/constants';
+import { UPDATE_PROJECT } from '../../config/gqls';
 
 const styles = makeStyles(theme => ({
     root: {
@@ -31,25 +31,22 @@ const styles = makeStyles(theme => ({
     }
 }));
 
-const CreateProject = ({ handleCloseDialog }) => {
+const UpdateFormProject = ({ project, handleHide }) => {
 
     const classes = styles();
 
-    const [code, setCode] = React.useState('');
-    const [name, setName] = React.useState('');
-    const [descr, setDescr] = React.useState('');
-    const [status, setStatus] = React.useState(projectStatuses[0].code || '');
-    const [external_code, setExternalCode] = React.useState('');
-    const [external_url, setExternalUrl] = React.useState('');
+    const [code, setCode] = React.useState(project.code || '');
+    const [name, setName] = React.useState(project.name || '');
+    const [descr, setDescr] = React.useState(project.descr || '');
+    const [status, setStatus] = React.useState(project.status || '');
+    const [external_code, setExternalCode] = React.useState(project.external_code || '');
+    const [external_url, setExternalUrl] = React.useState(project.external_url || '');
 
-    const handleClose = () => {
-        handleCloseDialog();
-    }
+    const handleSave = async (updateProject) => {
 
-    const handleSave = async (callMutation) => {
-
-        callMutation({
+        updateProject({
             variables: {
+                id: project.id,
                 input: {
                     code,
                     name,
@@ -61,7 +58,7 @@ const CreateProject = ({ handleCloseDialog }) => {
             }
         })
 
-        handleCloseDialog();
+        handleHide();
     }
 
     const handleChange = (event) => {
@@ -90,24 +87,8 @@ const CreateProject = ({ handleCloseDialog }) => {
     }
 
     return (
-        <Mutation
-            mutation={CREATE_PROJECT}
-            update={(cache, { data: { createProject } }) => {
-                const { projects } = cache.readQuery({ query: GET_PROJECT_SET });
-                cache.writeQuery({
-                    query: GET_PROJECT_SET,
-                    data: { projects: projects.concat([createProject]) },
-                });
-                cache.writeData({
-                    data: {
-                        messageBarOpen: true,
-                        messageBarSeverity: severity.success,
-                        messageBarText: `Project ${createProject.name} (${createProject.code}) was created successfully.`,
-                    },
-                });
-            }}
-        >
-            {(createProject) => (
+        <Mutation mutation={UPDATE_PROJECT} key={project.id}>
+            {(updateProject) => (
                 <>
                     <FormControl className={classes.root}>
                         <TextField
@@ -176,8 +157,8 @@ const CreateProject = ({ handleCloseDialog }) => {
                         />
                     </FormControl>
                     <div className={classes.buttons}>
-                        <Button color="primary" onClick={handleClose}>Cancel</Button>
-                        <Button color="primary" onClick={() => { handleSave(createProject) }} >Save</Button>
+                        <Button color="primary" onClick={handleHide}>Cancel</Button>
+                        <Button color="primary" onClick={() => { handleSave(updateProject) }} >Save</Button>
                     </div>
                 </>
             )}
@@ -185,8 +166,9 @@ const CreateProject = ({ handleCloseDialog }) => {
     );
 }
 
-CreateProject.propTypes = {
-    handleCloseDialog: PropTypes.func,
+UpdateFormProject.propTypes = {
+    project: PropTypes.object.isRequired,
+    handleHide: PropTypes.func.isRequired,
 };
 
-export default CreateProject;
+export default UpdateFormProject;

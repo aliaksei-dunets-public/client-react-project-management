@@ -12,6 +12,7 @@ import Button from '@material-ui/core/Button';
 import { useHistory } from "react-router-dom";
 
 import { nav } from '../../config/constants';
+import ToolbarMenuProject from '../project/ToolbarMenuProject';
 
 // import MenuComponent from './MenuComponent';
 
@@ -20,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
         flexGrow: 1,
         marginBottom: theme.spacing(1),
     },
-    menuButton: {        
+    menuButton: {
         marginRight: theme.spacing(2),
         justifyContent: 'end'
     },
@@ -85,9 +86,20 @@ export default function ToolbarComponent() {
                         {nav.home.name}
                     </Button>
 
-                    <Button color="inherit" onClick={() => { history.push(nav.projects.path) }}>
+                    <ToolbarMenuProject />
+
+                    {/* <MenuComponent
+                        id={nav.projects.path}
+                        name={nav.projects.name}
+                        items={[
+                            { key: 'active_projects', name: 'Active Projects', handle: () => { history.push(nav.projects.path) } },
+                            { key: 'all_projects', name: 'All Projects', handle: () => { history.push(nav.projects.path) } }
+                        ]}
+                    /> */}
+
+                    {/* <Button color="inherit" onClick={() => { history.push(nav.projects.path) }}>
                         {nav.projects.name}
-                    </Button>
+                    </Button> */}
 
                     <Button color="inherit" onClick={() => { history.push(nav.issues.path) }}>
                         {nav.issues.name}

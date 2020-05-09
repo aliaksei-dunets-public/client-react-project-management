@@ -13,8 +13,14 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: '#fafafa',
   },
   headerText: {
-    color: 'rgba(0, 0, 0, 0.87)'
+    color: 'rgba(0, 0, 0, 0.87)',
+    flexGrow: 1,
   },
+  actions: {
+    '& > *': {
+      margin: theme.spacing(1),
+    },
+  }
 }));
 
 const ToolbarDetailPage = ({ title, children }) => {
@@ -30,7 +36,9 @@ const ToolbarDetailPage = ({ title, children }) => {
         <Typography className={classes.headerText} variant="h6" noWrap>
           {title}
         </Typography>
-        {children}
+        <div className={classes.actions}>
+          {children}
+        </div>
       </Toolbar>
     </AppBar>
   );

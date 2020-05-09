@@ -2,6 +2,14 @@ import gql from 'graphql-tag';
 
 let FRAGMENT = {};
 
+const MESSAGE_BAR_LOCAL = gql`
+    query getMessageBar { 
+        messageBarOpen @client
+        messageBarSeverity @client
+        messageBarText @client
+    }
+`;
+
 FRAGMENT.fragments = {
     PROJECT_COMMON: gql`
         fragment FragmentProject on Project {
@@ -28,17 +36,9 @@ FRAGMENT.fragments = {
     `
 }
 
-const MESSAGE_BAR_LOCAL = gql`
-    query getMessageBar { 
-        messageBarOpen @client
-        messageBarSeverity @client
-        messageBarText @client
-    }
-`;
-
 const GET_PROJECT_SET = gql`
-    {
-        projects {
+    query getProjects($status:ProjectStatus) {
+        projects(status: $status) {
             ...FragmentProject
         }    
     }
@@ -63,6 +63,15 @@ const GET_PROJECT = gql`
 const CREATE_PROJECT = gql`
     mutation createProject($input:ProjectCreate) {
         createProject(input:$input) {
+            ...FragmentProject
+        }       
+    }
+    ${FRAGMENT.fragments.PROJECT_COMMON}
+`;
+
+const UPDATE_PROJECT = gql`
+    mutation updateProject($id:ID!, $input:ProjectEdit) {
+        updateProject(id:$id, input:$input) {
             ...FragmentProject
         }       
     }
@@ -113,6 +122,7 @@ export {
     GET_PROJECT_SET,
     GET_PROJECT,
     CREATE_PROJECT,
+    UPDATE_PROJECT,
     DELETE_PROJECT,
     GET_ISSUE_SET,
     CREATE_ISSUE,

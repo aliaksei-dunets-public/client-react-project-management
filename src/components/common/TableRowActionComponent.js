@@ -5,16 +5,17 @@ import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Tooltip from '@material-ui/core/Tooltip';
 
-export default function TableRowActionComponent(props) {
+export default function TableRowActionComponent({ row, handleUpdate, handleDelete }) {
+
     return (
         <>
             <Tooltip title="Edit entry" aria-label="Edit">
-                <IconButton color="primary" aria-label="Edit" onClick={() => { props.handleUpdateRow(props.rowId) }}>
+                <IconButton color="primary" aria-label="Edit" onClick={() => handleUpdate(row)}>
                     <EditIcon />
                 </IconButton>
             </Tooltip>
             <Tooltip title="Delete entry" aria-label="Delete">
-                <IconButton color="primary" aria-label="Delete" onClick={() => { props.handelDeleteRow(props.rowId) }}>
+                <IconButton color="primary" aria-label="Delete" onClick={() => handleDelete(row)}>
                     <DeleteIcon />
                 </IconButton>
             </Tooltip>
@@ -23,7 +24,7 @@ export default function TableRowActionComponent(props) {
 };
 
 TableRowActionComponent.propTypes = {
-    rowId: PropTypes.string.isRequired,
-    handleUpdateRow: PropTypes.func.isRequired,
-    handelDeleteRow: PropTypes.func.isRequired,
+    row: PropTypes.object.isRequired,
+    handleUpdate: PropTypes.func.isRequired,
+    handleDelete: PropTypes.func.isRequired,
 };

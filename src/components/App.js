@@ -7,6 +7,7 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 import { ApolloProvider } from '@apollo/react-hooks';
 
 import { nav } from '../config/constants';
+// import typeDefs from '../states/schema';
 import ToolbarMainComponent from './common/ToolbarMainComponent';
 import MessageBarComponent from './common/MessageBarComponent';
 import PageProjects from './project/PageProjects';
@@ -25,14 +26,19 @@ const client = new ApolloClient({
   //   uri: config[process.env.NODE_ENV || 'development'].server.uri,
   // }),
   uri: process.env.REACT_APP_SERVER_URI || 'http://localhost:3005',
-  resolvers: {},
+  resolvers: {
+    // Query: {
+    //   updateDialog: () => ({ __typename: "UpdateDialog", open: true, title: 'Resolver test' })
+    // }
+  },
+  // typeDefs,
 });
 
 cache.writeData({
   data: {
     messageBarOpen: false,
     messageBarSeverity: 'info',
-    messageBarText: '',
+    messageBarText: ''
   },
 });
 
