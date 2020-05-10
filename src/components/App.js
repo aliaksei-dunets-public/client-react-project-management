@@ -12,6 +12,7 @@ import ToolbarMainComponent from './common/ToolbarMainComponent';
 import MessageBarComponent from './common/MessageBarComponent';
 import PageProjects from './project/PageProjects';
 import DetailProject from './project/DetailProject';
+import DashboardProject from '../components/project/DashboardProject';
 import PageIssues from './issue/PageIssues';
 import PageTimelogs from './timelog/PageTimelogs';
 import PageProjections from './projection/PageProjections';
@@ -58,6 +59,9 @@ function App() {
             </Route>
             <Route path={`${nav.project.path}/:id`}>
               <DetailProject />
+            </Route>
+            <Route path={`${nav.dashboard.path}/:id`}>
+              <DashboardProject />
             </Route>
             <Route path={nav.issues.path} exact>
               <PageIssues />

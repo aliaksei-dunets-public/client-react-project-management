@@ -51,14 +51,11 @@ const GET_PROJECT = gql`
             ...FragmentProject
             createdAt
             updatedAt
-            issues {
-                ...FragmentIssue
-            }
         }  
     }
-    ${FRAGMENT.fragments.PROJECT_COMMON}
-    ${FRAGMENT.fragments.ISSUE_COMMON}
+    ${FRAGMENT.fragments.PROJECT_COMMON}    
 `;
+
 
 const CREATE_PROJECT = gql`
     mutation createProject($input:ProjectCreate) {
@@ -97,6 +94,17 @@ const GET_ISSUE_SET = gql`
     ${FRAGMENT.fragments.ISSUE_COMMON}
 `;
 
+const GET_PROJECT_ISSUE_SET = gql`
+    query getProject($id:ID!) {
+        project(id:$id) {
+            issues {
+                ...FragmentIssue
+            }
+        }  
+    }
+    ${FRAGMENT.fragments.ISSUE_COMMON}
+`;
+
 const CREATE_ISSUE = gql`
     mutation createIssue($input:IssueCreate) {
         createIssue(input:$input) {
@@ -125,6 +133,7 @@ export {
     UPDATE_PROJECT,
     DELETE_PROJECT,
     GET_ISSUE_SET,
+    GET_PROJECT_ISSUE_SET,
     CREATE_ISSUE,
     DELETE_ISSUE,
 }

@@ -1,7 +1,12 @@
 import React from 'react';
+import { makeStyles } from '@material-ui/core/styles';
 import { useParams, useHistory } from "react-router-dom";
 import { Query } from "react-apollo";
 import Button from '@material-ui/core/Button';
+import Fab from '@material-ui/core/Fab';
+import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
+import Hidden from '@material-ui/core/Hidden';
 
 import { nav } from '../../config/constants';
 import { GET_PROJECT } from '../../config/gqls';
@@ -11,14 +16,29 @@ import ToolbarDetailComponent from '../common/ToolbarDetailComponent';
 import LabelValueComponent from '../common/LabelValueComponent';
 import StatusComponent from '../common/StatusComponent';
 import ExternalLinkComponent from '../common/ExternalLinkComponent';
-import CreateDialogComponent from '../common/CreateDialogComponent';
-import TableIssues from '../issue/TableIssues';
-import CreateIssue from '../issue/CreateIssue';
+// import CreateDialogComponent from '../common/CreateDialogComponent';
+// import TableIssues from '../issue/TableIssues';
+// import CreateIssue from '../issue/CreateIssue';
 import UpdateFormProject from './UpdateFormProject';
 import DeleteFormProject from './DeleteFormProject';
 import DialogHandler from '../common/DialogHandler';
 
+const useStyles = makeStyles(theme => ({
+    fabEdit: {
+        position: 'fixed',
+        bottom: theme.spacing(3),
+        right: theme.spacing(10),
+    },
+    fabDelete: {
+        position: 'fixed',
+        bottom: theme.spacing(3),
+        right: theme.spacing(3),
+    },
+}));
+
 const DetailProject = () => {
+
+    const classes = useStyles();
 
     const history = useHistory();
     const { id } = useParams();
@@ -44,12 +64,14 @@ const DetailProject = () => {
                     return (
                         <>
                             <ToolbarDetailComponent title={`Project: ${data.project.code} - ${data.project.name}`} >
-                                <Button variant="contained" color="primary" onClick={dialogUpdateHandler.show}>
-                                    Edit
+                                <Hidden xsDown>
+                                    <Button variant="contained" color="primary" onClick={dialogUpdateHandler.show}>
+                                        Edit
                                 </Button>
-                                <Button variant="contained" color="primary" onClick={dialogDeleteHandler.show}>
-                                    Delete
+                                    <Button variant="contained" color="primary" onClick={dialogDeleteHandler.show}>
+                                        Delete
                                 </Button>
+                                </Hidden>
                             </ToolbarDetailComponent>
                             <LabelValueComponent label='ID' value={data.project.id} />
                             <LabelValueComponent label='Code' value={data.project.code} />
@@ -61,10 +83,30 @@ const DetailProject = () => {
                             <LabelValueComponent label='External' >
                                 <ExternalLinkComponent url={data.project.external_url} code={data.project.external_code} />
                             </LabelValueComponent>
-                            <TableIssues issues={data.project.issues} />
+                            {/* <TableIssues issues={data.project.issues} />
                             <CreateDialogComponent title="Create a new Issue">
                                 <CreateIssue project={data.project} />
-                            </CreateDialogComponent>
+                            </CreateDialogComponent> */}
+                            <Hidden smUp>
+                                <Fab
+                                    className={classes.fabEdit}
+                                    size="medium"
+                                    color="primary"
+                                    aria-label="edit"
+                                    onClick={dialogUpdateHandler.show}
+                                >
+                                    <EditIcon />
+                                </Fab>
+                                <Fab
+                                    className={classes.fabDelete}
+                                    size="medium"
+                                    color="secondary"
+                                    aria-label="delete"
+                                    onClick={dialogDeleteHandler.show}
+                                >
+                                    <DeleteIcon />
+                                </Fab>
+                            </Hidden>
                             <DialogUpdateComponent title={`Update the project - ${data.project.name}`}>
                                 <UpdateFormProject project={data.project} handleHide={dialogUpdateHandler.hide} />
                             </DialogUpdateComponent>
@@ -77,6 +119,7 @@ const DetailProject = () => {
                                     }}
                                 />
                             </DialogDeleteComponent>
+
                         </>
                     );
                 }}

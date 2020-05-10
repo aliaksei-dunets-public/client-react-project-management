@@ -43,6 +43,10 @@ module.exports = {
             name: 'Project',
             path: '/Project'
         },
+        dashboard: {
+            name: 'Dashboard',
+            path: '/Project Dashboard'
+        },
         issues: {
             name: 'Issues',
             path: '/Issues'

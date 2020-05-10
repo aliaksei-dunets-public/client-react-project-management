@@ -60,7 +60,7 @@ const ToolbarMenuProject = () => {
                                             key={item.id}
                                             onClick={() => {
                                                 handleClose();
-                                                history.push(`${nav.project.path}/${item.id}`);
+                                                history.push(`${nav.dashboard.path}/${item.id}`);
                                             }}
                                         >
                                             {`${item.code} - ${item.name}`}

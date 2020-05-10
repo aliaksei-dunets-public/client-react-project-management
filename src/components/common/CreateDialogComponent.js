@@ -10,8 +10,8 @@ import AddIcon from '@material-ui/icons/Add';
 const useStyles = makeStyles(theme => ({
     fab: {
         position: 'fixed',
-        bottom: theme.spacing(4),
-        right: theme.spacing(4),
+        bottom: theme.spacing(3),
+        right: theme.spacing(3),
     },
 }));
 
@@ -27,7 +27,13 @@ const CreateDialogComponent = (props) => {
 
     return (
         <>
-            <Fab className={classes.fab} color="primary" aria-label="add" onClick={() => { setOpen(true) }}>
+            <Fab
+                className={classes.fab}
+                size="medium"
+                color="primary"
+                aria-label="add"
+                onClick={() => { setOpen(true) }}
+            >
                 <AddIcon />
             </Fab>
             <Dialog open={open} aria-labelledby="form-dialog-title">
