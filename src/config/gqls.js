@@ -97,6 +97,8 @@ const GET_ISSUE_SET = gql`
 const GET_PROJECT_ISSUE_SET = gql`
     query getProject($id:ID!) {
         project(id:$id) {
+            id
+            external_url
             issues {
                 ...FragmentIssue
             }
@@ -108,6 +110,15 @@ const GET_PROJECT_ISSUE_SET = gql`
 const CREATE_ISSUE = gql`
     mutation createIssue($input:IssueCreate) {
         createIssue(input:$input) {
+            ...FragmentIssue
+        }        
+    }
+    ${FRAGMENT.fragments.ISSUE_COMMON}
+`;
+
+const UPDATE_ISSUE = gql`
+    mutation updateIssue($id:ID!, $input:IssueEdit) {
+        updateIssue(id:$id, input:$input) {
             ...FragmentIssue
         }        
     }
@@ -135,5 +146,6 @@ export {
     GET_ISSUE_SET,
     GET_PROJECT_ISSUE_SET,
     CREATE_ISSUE,
+    UPDATE_ISSUE,
     DELETE_ISSUE,
 }

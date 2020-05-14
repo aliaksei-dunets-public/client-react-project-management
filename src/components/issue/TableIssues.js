@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Link as LinkRouter } from "react-router-dom";
 import Table from '@material-ui/core/Table';
@@ -8,11 +8,16 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import Hidden from '@material-ui/core/Hidden';
 
 import { nav } from '../../config/constants';
 import ExternalLinkComponent from '../common/ExternalLinkComponent';
 import StatusComponent from '../common/StatusComponent';
+import TableRowActionComponent from '../common/TableRowActionComponent';
 import DeleteIssue from './DeleteIssue';
+import DialogHandler from '../common/DialogHandler';
+
+import { UpdateIssue } from './';
 
 const useStyles = makeStyles(theme => ({
     headerTable: {
@@ -23,6 +28,14 @@ const useStyles = makeStyles(theme => ({
 const TableIssues = ({ issues }) => {
     const classes = useStyles();
 
+    const [selected, setSelected] = useState({});
+
+    const dialogUpdateHandler = DialogHandler();
+    const DialogUpdateComponent = dialogUpdateHandler.component;
+
+    const dialogDeleteHandler = DialogHandler();
+    const DialogDeleteComponent = dialogDeleteHandler.component;
+
     return (
         <>
             <TableContainer component={Paper}>
@@ -31,10 +44,14 @@ const TableIssues = ({ issues }) => {
                         <TableRow>
                             <TableCell>Code</TableCell>
                             <TableCell>Summary</TableCell>
-                            <TableCell>Description</TableCell>
+                            <Hidden smDown>
+                                <TableCell>Description</TableCell>
+                            </Hidden>
                             <TableCell align="center">Status</TableCell>
-                            <TableCell align="center">External</TableCell>
-                            <TableCell align="center">Actions</TableCell>
+                            <Hidden xsDown>
+                                <TableCell align="center">External</TableCell>
+                                <TableCell align="center">Actions</TableCell>
+                            </Hidden>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -46,21 +63,41 @@ const TableIssues = ({ issues }) => {
                                     </LinkRouter>
                                 </TableCell>
                                 <TableCell>{row.summary}</TableCell>
-                                <TableCell>{row.descr}</TableCell>
+                                <Hidden smDown>
+                                    <TableCell>{row.descr}</TableCell>
+                                </Hidden>
                                 <TableCell align="center">
                                     <StatusComponent status={row.status} />
                                 </TableCell>
-                                <TableCell align="center">
-                                    <ExternalLinkComponent url={row.external_url} code={row.external_code} />
-                                </TableCell>
-                                <TableCell align="center">
-                                    <DeleteIssue id={row.id} name={row.summary} />
-                                </TableCell>
+                                <Hidden xsDown>
+                                    <TableCell align="center">
+                                        <ExternalLinkComponent url={row.external_url} code={row.external_code} />
+                                    </TableCell>
+                                    <TableCell align="center">
+                                        <TableRowActionComponent
+                                            row={row}
+                                            handleUpdate={() => {
+                                                setSelected(row);
+                                                dialogUpdateHandler.show();
+                                            }}
+                                            handleDelete={() => {
+                                                setSelected(row);
+                                                dialogDeleteHandler.show();
+                                            }}
+                                        />
+                                    </TableCell>
+                                </Hidden>
                             </TableRow>
                         ))}
                     </TableBody>
                 </Table>
             </TableContainer>
+            <DialogUpdateComponent title={`Update the issue - ${selected.summary}`}>
+                <UpdateIssue issue={selected} handleHide={dialogUpdateHandler.hide} />
+            </DialogUpdateComponent>
+            <DialogDeleteComponent title={`Delete the issue - ${selected.summary}`}>
+                <DeleteIssue issue={selected} handleHide={dialogDeleteHandler.hide} />
+            </DialogDeleteComponent>
         </>
     );
 }

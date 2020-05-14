@@ -7,15 +7,20 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 
 import { Mutation } from '@apollo/react-components';
-import { issueStatuses, severity } from '../../config/constants';
-import { GET_ISSUE_SET, CREATE_ISSUE, GET_PROJECT_ISSUE_SET } from '../../config/gqls';
+import { issueStatuses } from '../../config/constants';
+import { UPDATE_ISSUE } from '../../config/gqls';
 
 const styles = makeStyles(theme => ({
     root: {
         '& > *': {
             margin: theme.spacing(1),
         },
-        width: 400,
+        [theme.breakpoints.up('xs')]: {
+            width: 400
+        },
+        [theme.breakpoints.down('xs')]: {
+            width: 250
+        },
     },
     buttons: {
         width: '100%',
@@ -26,26 +31,22 @@ const styles = makeStyles(theme => ({
     }
 }));
 
-const CreateIssue = ({ project, handleCloseDialog }) => {
+export const UpdateIssue = ({ issue, handleHide }) => {
 
     const classes = styles();
 
-    const [summary, setSummary] = React.useState('');
-    const [descr, setDescr] = React.useState('');
-    const [status, setStatus] = React.useState(issueStatuses[0].code || '');
-    const [external_code, setExternalCode] = React.useState('');
-    const [external_url, setExternalUrl] = React.useState(project.external_url || '');
-
-    const handleClose = () => {
-        handleCloseDialog();
-    }
+    const [summary, setSummary] = React.useState(issue.summary || '');
+    const [descr, setDescr] = React.useState(issue.descr || '');
+    const [status, setStatus] = React.useState(issue.status || '');
+    const [external_code, setExternalCode] = React.useState(issue.external_code || '');
+    const [external_url, setExternalUrl] = React.useState(issue.external_url || '');
 
     const handleSave = async (callMutation) => {
 
         callMutation({
             variables: {
+                id: issue.id,
                 input: {
-                    project_id: project.id,
                     summary,
                     descr,
                     status,
@@ -55,7 +56,7 @@ const CreateIssue = ({ project, handleCloseDialog }) => {
             }
         })
 
-        handleCloseDialog();
+        handleHide();
     }
 
     const handleChange = (event) => {
@@ -81,42 +82,8 @@ const CreateIssue = ({ project, handleCloseDialog }) => {
     }
 
     return (
-        <Mutation
-            mutation={CREATE_ISSUE}
-            update={(cache, { data: { createIssue } }) => {
-
-                try {
-                    const { issues } = cache.readQuery({ query: GET_ISSUE_SET });
-                    cache.writeQuery({
-                        query: GET_ISSUE_SET,
-                        data: { issues: issues.concat(createIssue) }
-                    });
-                } catch (error) {
-
-                }
-
-                try {
-                    const { project } = cache.readQuery({ query: GET_PROJECT_ISSUE_SET, variables: { id: createIssue.project_id } });
-                    const newProject = { ...project };
-                    newProject.issues = project.issues.concat(createIssue);
-                    cache.writeQuery({
-                        query: GET_PROJECT_ISSUE_SET,
-                        data: { project: newProject }
-                    });
-                } catch (error) {
-
-                }
-
-                cache.writeData({
-                    data: {
-                        messageBarOpen: true,
-                        messageBarSeverity: severity.success,
-                        messageBarText: `Issue ${createIssue.summary} (${createIssue.code}) was created successfully.`,
-                    },
-                });
-            }}
-        >
-            {(createProject) => (
+        <Mutation mutation={UPDATE_ISSUE} key={issue.id} >
+            {(updateIssue) => (
                 <>
                     <FormControl className={classes.root}>
                         <TextField
@@ -175,18 +142,16 @@ const CreateIssue = ({ project, handleCloseDialog }) => {
                         />
                     </FormControl>
                     <div className={classes.buttons}>
-                        <Button color="primary" onClick={handleClose}>Cancel</Button>
-                        <Button color="primary" onClick={() => { handleSave(createProject) }} >Save</Button>
+                        <Button color="primary" onClick={handleHide}>Cancel</Button>
+                        <Button color="primary" onClick={() => { handleSave(updateIssue) }} >Save</Button>
                     </div>
                 </>
             )}
-        </Mutation>
+        </Mutation >
     );
 }
 
-CreateIssue.propTypes = {
-    project: PropTypes.object.isRequired,
-    handleCloseDialog: PropTypes.func,
+UpdateIssue.propTypes = {
+    issue: PropTypes.object.isRequired,
+    handleHide: PropTypes.func.isRequired,
 };
-
-export default CreateIssue;
