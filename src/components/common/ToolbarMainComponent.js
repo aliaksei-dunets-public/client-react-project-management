@@ -109,6 +109,10 @@ export default function ToolbarComponent() {
                             {nav.timelogs.name}
                         </Button>
 
+                        <Button color="inherit" onClick={() => { history.push(nav.timesheet.path) }}>
+                            {nav.timesheet.name}
+                        </Button>
+
                         <Button color="inherit" onClick={() => { history.push(nav.projections.path) }}>
                             {nav.projections.name}
                         </Button>

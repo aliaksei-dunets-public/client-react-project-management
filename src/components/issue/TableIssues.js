@@ -14,10 +14,9 @@ import { nav } from '../../config/constants';
 import ExternalLinkComponent from '../common/ExternalLinkComponent';
 import StatusComponent from '../common/StatusComponent';
 import TableRowActionComponent from '../common/TableRowActionComponent';
-import DeleteIssue from './DeleteIssue';
+import { UpdateIssue, DeleteIssue } from './';
 import DialogHandler from '../common/DialogHandler';
 
-import { UpdateIssue } from './';
 
 const useStyles = makeStyles(theme => ({
     headerTable: {

@@ -1,26 +1,13 @@
 import React from 'react';
 import { Query } from "react-apollo";
-import { gql } from "apollo-boost";
 
+import { GET_TIMELOG_SET } from '../../config/gqls';
 import TableTimelogs from './TableTimelogs';
-
-const GET_TASK_SET = gql`
-    {
-        timelogs {
-            id
-            project_id
-            issue_id
-            dateLog
-            valueLog
-            descr
-        }  
-    }
-`
 
 const PageTimelog = () => {
     return (
         <Query
-            query={GET_TASK_SET}
+            query={GET_TIMELOG_SET}
             notifyOnNetworkStatusChange
         >
             {({ loading, error, data, refetch, networkStatus }) => {

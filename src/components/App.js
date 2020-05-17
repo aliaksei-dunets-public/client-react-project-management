@@ -13,8 +13,9 @@ import MessageBarComponent from './common/MessageBarComponent';
 import PageProjects from './project/PageProjects';
 import DetailProject from './project/DetailProject';
 import DashboardProject from '../components/project/DashboardProject';
-import PageIssues from './issue/PageIssues';
+import { PageIssues, Detailssue } from './issue';
 import PageTimelogs from './timelog/PageTimelogs';
+import { PageTimesheet } from './timesheet';
 import PageProjections from './projection/PageProjections';
 import PageVersions from './version/PageVersions';
 import PageStories from './story/PageStories';
@@ -66,8 +67,14 @@ function App() {
             <Route path={nav.issues.path} exact>
               <PageIssues />
             </Route>
+            <Route path={`${nav.issue.path}/:id`} exact>
+              <Detailssue />
+            </Route>
             <Route path={nav.timelogs.path} exact>
               <PageTimelogs />
+            </Route>
+            <Route path={nav.timesheet.path} exact>
+              <PageTimesheet />
             </Route>
             <Route path={nav.projections.path} exact>
               <PageProjections />

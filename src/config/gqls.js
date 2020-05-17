@@ -33,7 +33,17 @@ FRAGMENT.fragments = {
             external_code
             external_url  
         }     
-    `
+    `,
+    TIMELOG_COMMON: gql`
+        fragment FragmentTimelog on Timelog {
+            id
+            project_id
+            issue_id
+            dateLog
+            valueLog
+            descr
+        }
+    `,
 }
 
 const GET_PROJECT_SET = gql`
@@ -56,6 +66,18 @@ const GET_PROJECT = gql`
     ${FRAGMENT.fragments.PROJECT_COMMON}    
 `;
 
+const GET_PROJECT_ISSUE_SET = gql`
+    query getProject($id:ID!) {
+        project(id:$id) {
+            id
+            external_url
+            issues {
+                ...FragmentIssue
+            }
+        }  
+    }
+    ${FRAGMENT.fragments.ISSUE_COMMON}
+`;
 
 const CREATE_PROJECT = gql`
     mutation createProject($input:ProjectCreate) {
@@ -94,17 +116,17 @@ const GET_ISSUE_SET = gql`
     ${FRAGMENT.fragments.ISSUE_COMMON}
 `;
 
-const GET_PROJECT_ISSUE_SET = gql`
-    query getProject($id:ID!) {
-        project(id:$id) {
-            id
-            external_url
-            issues {
-                ...FragmentIssue
+const GET_ISSUE = gql`
+    query getIssue($id:ID!) {
+        issue(id:$id) {
+            ...FragmentIssue
+            timelogs {
+            ...FragmentTimelog
             }
         }  
     }
     ${FRAGMENT.fragments.ISSUE_COMMON}
+    ${FRAGMENT.fragments.TIMELOG_COMMON}
 `;
 
 const CREATE_ISSUE = gql`
@@ -136,16 +158,80 @@ const DELETE_ISSUE = gql`
     }
 `;
 
+const GET_TIMELOG_SET = gql`
+{
+    timelogs {
+        ...FragmentTimelog
+    }  
+}
+    ${FRAGMENT.fragments.TIMELOG_COMMON}
+`;
+
+const CREATE_TIMELOG = gql`
+    mutation createTimelog($input:TimelogCreate) {
+        createTimelog(input:$input) {
+            ...FragmentTimelog
+        }        
+    }
+    ${FRAGMENT.fragments.TIMELOG_COMMON}
+`;
+
+const UPDATE_TIMELOG = gql`
+    mutation updateTimelog($id:ID!, $input:TimelogEdit) {
+        updateTimelog(id:$id, input:$input) {
+            ...FragmentTimelog
+        }        
+    }
+    ${FRAGMENT.fragments.TIMELOG_COMMON}
+`;
+
+const DELETE_TIMELOG = gql`
+    mutation deleteTimelog($id:ID!) {
+        deleteTimelog(id:$id) {
+            id
+            project_id
+            issue_id
+            dateLog
+        }
+    }
+`;
+
+const TIMESHEET_SET = gql`
+    query getTimesheet($startDate:Date,$endDate:Date) {
+        timesheet(startDate:$startDate,endDate:$endDate) {
+            projects {
+                ...FragmentProject
+            }
+            issues {
+                ...FragmentIssue
+            }
+            timelogs {
+                ...FragmentTimelog
+            }
+        }  
+    }
+    ${FRAGMENT.fragments.PROJECT_COMMON}
+    ${FRAGMENT.fragments.ISSUE_COMMON}
+    ${FRAGMENT.fragments.TIMELOG_COMMON}
+`;
+
 export {
     MESSAGE_BAR_LOCAL,
+    FRAGMENT,
     GET_PROJECT_SET,
     GET_PROJECT,
+    GET_PROJECT_ISSUE_SET,
     CREATE_PROJECT,
     UPDATE_PROJECT,
     DELETE_PROJECT,
     GET_ISSUE_SET,
-    GET_PROJECT_ISSUE_SET,
+    GET_ISSUE,
     CREATE_ISSUE,
     UPDATE_ISSUE,
     DELETE_ISSUE,
+    GET_TIMELOG_SET,
+    CREATE_TIMELOG,
+    UPDATE_TIMELOG,
+    DELETE_TIMELOG,
+    TIMESHEET_SET,
 }

@@ -59,6 +59,10 @@ module.exports = {
             name: 'Timelogs',
             path: '/Timelogs'
         },
+        timesheet: {
+            name: 'Timesheet',
+            path: '/Timesheet'
+        },
         projections: {
             name: 'Projections',
             path: '/Projections'
