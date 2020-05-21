@@ -14,17 +14,18 @@
     "@testing-library/user-event": "^7.2.1",
     "apollo-boost": "^0.4.7",
     "apollo-cache-inmemory": "^1.6.5",
+    "bootstrap-daterangepicker": "^3.0.5",
     "graphql": "^15.0.0",
+    "jquery": "^3.4.1",
     "moment": "^2.25.3",
     "react": "^16.13.1",
     "react-apollo": "^3.1.4",
+    "react-bootstrap-daterangepicker": "^4.1.0",
     "react-dom": "^16.13.1",
     "react-moment": "^0.9.7",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.1",
-    "react-bootstrap-daterangepicker": "^4.1.0",
-    "bootstrap-daterangepicker": "^3.0.5",
-    "jquery": "^3.4.1"
+    "recharts": "^1.8.5"
   },
   "scripts": {
     "start": "react-scripts start",

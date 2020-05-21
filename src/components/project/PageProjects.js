@@ -16,7 +16,7 @@ const PageProject = () => {
                 notifyOnNetworkStatusChange
             >
                 {({ loading, error, data, refetch, networkStatus }) => {
-                    if (networkStatus === 4) return 'Refetching!';
+                    // if (networkStatus === 4) return 'Refetching!';
                     if (loading) return <LoadingComponent loading={loading} />;
                     if (error) return <ErrorServiceComponent error={error} />;
 

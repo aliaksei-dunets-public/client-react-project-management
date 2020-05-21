@@ -164,3 +164,79 @@ export const generateTimesheet = (data, startDate, endDate) => {
         dateRange: array4DateRange
     };
 }
+
+export const generateSimpleBar = (data, startDate, endDate) => {
+
+    let legendDetail = [];
+    let barCharDetail = [];
+
+    let projects = [],
+        timelogs = new RangeDateTime();
+
+    const array4DateRange = getArray4DateRange(startDate, endDate);
+
+    array4DateRange.forEach((item, index) => {
+        barCharDetail.push({
+            period: moment.weekdays(true, index + 1),
+            date: item
+        })
+    });
+
+    if (!data.timelogs) return {
+        legendDetail,
+        barCharDetail
+    };
+
+    data.timelogs.forEach(element => {
+        timelogs.addDateTime({
+            date: element.dateLog,
+            time: element.valueLog,
+            project_id: element.project_id,
+            issue_id: element.issue_id,
+            timelog_id: element.id
+        });
+    });
+
+    data.projects.forEach(element => {
+        const instanceProject = new ProjectTime(element);
+        instanceProject.addRangeDateTime(array4DateRange, timelogs);
+        projects.push(instanceProject);
+    });
+
+    projects.forEach((project, index) => {
+
+        legendDetail.push({
+            key: project.id,
+            legend: `${project.name} (${project.code})`,
+            fill: getFillColor(index),
+            id: project.id
+        });
+
+        project.timeSlots.rangeDateTime.forEach((dateTime, index) => {
+
+            let singleBarDetail = barCharDetail.find(item => item.date.isSame(dateTime.date, "day"));
+
+            if (dateTime.time > 0) {
+                if (!singleBarDetail.hasOwnProperty(project.id)) singleBarDetail[project.id] = +dateTime.time;
+                else singleBarDetail[project.id] = +dateTime.time;
+            }
+
+        });
+
+    });
+
+    return {
+        legendDetail,
+        barCharDetail
+    }
+}
+
+const getFillColor = (index) => {
+    // '#8884d8'
+    //'rgb(31, 119, 180)'
+    // rgb(255, 127, 14) - orange
+    // rgb(140, 86, 75) - bronw
+    // rgb(44, 160, 44) - green
+    const colors = ['rgb(31, 119, 180)', 'rgb(255, 127, 14)', 'rgb(140, 86, 75)', 'rgb(44, 160, 44)', '#8884d8'];
+    return colors[index];
+}

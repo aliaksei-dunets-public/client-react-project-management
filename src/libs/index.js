@@ -1,7 +1,9 @@
 export {
     getArray4DateRange,
-    generateTimesheet
+    generateTimesheet,
+    generateSimpleBar
 } from './utils';
+export { Aggregator } from './timeUtils';
 export {
     createdTimelog,
     updatedTimelog,

@@ -10,6 +10,13 @@ const MESSAGE_BAR_LOCAL = gql`
     }
 `;
 
+const IS_LOGGED_IN = gql`
+    query isUserLoggedIn {        
+        isLoggedIn @client
+    }
+`;
+
+
 FRAGMENT.fragments = {
     PROJECT_COMMON: gql`
         fragment FragmentProject on Project {
@@ -45,6 +52,12 @@ FRAGMENT.fragments = {
         }
     `,
 }
+
+const LOGIN_USER = gql`
+    mutation loginUser($email:String!, $password:String!) {
+        login(email:$email, password:$password)       
+    }
+`;
 
 const GET_PROJECT_SET = gql`
     query getProjects($status:ProjectStatus) {
@@ -217,7 +230,9 @@ const TIMESHEET_SET = gql`
 
 export {
     MESSAGE_BAR_LOCAL,
+    IS_LOGGED_IN,
     FRAGMENT,
+    LOGIN_USER,
     GET_PROJECT_SET,
     GET_PROJECT,
     GET_PROJECT_ISSUE_SET,

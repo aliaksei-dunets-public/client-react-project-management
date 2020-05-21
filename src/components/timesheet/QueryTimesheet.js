@@ -12,7 +12,7 @@ import Paper from '@material-ui/core/Paper';
 import Hidden from '@material-ui/core/Hidden';
 
 import { TIMESHEET_SET } from '../../config/gqls';
-import { generateTimesheet } from '../../libs';
+import { generateTimesheet, Aggregator } from '../../libs';
 import {
     LoadingComponent,
     ErrorServiceComponent,
@@ -55,6 +55,12 @@ const QueryTimesheet = ({ startDate, endDate }) => {
 
     const timesheetData = generateTimesheet(data.timesheet, startDate, endDate);
 
+    const aggregator = new Aggregator(startDate, endDate);
+    const timesheetData_new = aggregator.buildTimelogs(data.timesheet.timelogs)
+        .buildIssues(data.timesheet.issues)
+        .buildProjects(data.timesheet.projects)
+        .getTimesheet();
+
     return (
         <div className={classes.root}>
             <TableContainer component={Paper}>
@@ -65,7 +71,7 @@ const QueryTimesheet = ({ startDate, endDate }) => {
                             <TableCell className={classes.headerTable} align="center">Total</TableCell>
                             <Hidden xsDown>
                                 {
-                                    timesheetData.dateRange.map((item) => (
+                                    aggregator.getRangeDates().map((item) => (
                                         <TableCell
                                             className={classes.headerTable}
                                             align="center"

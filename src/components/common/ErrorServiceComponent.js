@@ -12,7 +12,7 @@ const ErrorServiceComponent = ({ error }) => {
     return (
         <>
             <Typography variant="h5" gutterBottom color="error">
-                {error.message}
+                {error ? error.message : 'Network Error. Connect to Admin.'}
             </Typography>
             {/* {
                 error.graphQLErrors.map(item => (
