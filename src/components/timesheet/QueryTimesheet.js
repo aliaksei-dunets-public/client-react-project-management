@@ -12,7 +12,7 @@ import Paper from '@material-ui/core/Paper';
 import Hidden from '@material-ui/core/Hidden';
 
 import { TIMESHEET_SET } from '../../config/gqls';
-import { generateTimesheet, Aggregator } from '../../libs';
+import { Aggregator } from '../../libs';
 import {
     LoadingComponent,
     ErrorServiceComponent,
@@ -53,10 +53,10 @@ const QueryTimesheet = ({ startDate, endDate }) => {
     if (loading) return <LoadingComponent />
     if (error) return <ErrorServiceComponent />
 
-    const timesheetData = generateTimesheet(data.timesheet, startDate, endDate);
+    // const timesheetData = generateTimesheet(data.timesheet, startDate, endDate);
 
     const aggregator = new Aggregator(startDate, endDate);
-    const timesheetData_new = aggregator.buildTimelogs(data.timesheet.timelogs)
+    const timesheetData = aggregator.buildTimelogs(data.timesheet.timelogs)
         .buildIssues(data.timesheet.issues)
         .buildProjects(data.timesheet.projects)
         .getTimesheet();
@@ -85,7 +85,7 @@ const QueryTimesheet = ({ startDate, endDate }) => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        <TableCellTimesheet projects={timesheetData.timesheet} changedNotification={refetch} />
+                        <TableCellTimesheet projects={timesheetData} changedNotification={refetch} />
                     </TableBody>
                 </Table>
             </TableContainer>

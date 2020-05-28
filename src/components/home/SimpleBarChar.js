@@ -29,8 +29,8 @@ const styles = makeStyles(theme => ({
         [theme.breakpoints.down('xs')]: {
             width: '100%',
             height: 400
-        },        
-        
+        },
+
     },
 }));
 
@@ -81,7 +81,7 @@ const SimpleBarChart = () => {
                                 dataKey={item.key}
                                 name={item.legend}
                                 fill={item.fill}
-                                // onClick={(data, index) => { console.log(data) }}
+                            // onClick={(data, index) => { console.log(data) }}
                             />
                         ))
                     }

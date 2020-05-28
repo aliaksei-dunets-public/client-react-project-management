@@ -32,6 +32,25 @@ export const createdTimelog = (cache, { data: { createTimelog } }) => {
 
 }
 
+export const createdMultiTimelogs = (cache, { data: { createMultiTimelogs } }) => {
+    try {
+        const issue_id = createMultiTimelogs[0].issue_id;
+
+        const { issue } = cache.readQuery({ query: GET_ISSUE, variables: { id: issue_id } });
+        const newIssue = { ...issue };
+        newIssue.timelogs = issue.timelogs.concat(createMultiTimelogs);
+        cache.writeQuery({
+            query: GET_ISSUE,
+            data: { issue: newIssue }
+        });
+    } catch (error) {
+
+    }
+
+    showMessaeBar(cache, severity.success, `Timelogs were created successfully.`);
+
+}
+
 export const updatedTimelog = (cache, { data: { updateTimelog } }) => {
     try {
         cache.writeFragment({

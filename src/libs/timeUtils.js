@@ -111,7 +111,8 @@ export class Aggregator {
         this.rangeDates.forEach((item, index) => {
             barChar.push({
                 point: moment.weekdays(true, index + 1),
-                date: item
+                date: item,
+                hasTime: false,
             })
         });
 
@@ -127,12 +128,22 @@ export class Aggregator {
                 let singleBarChar = barChar.find(item => element.date.isSame(item.date, "day"));
 
                 if (element.time > 0) {
-                    if (!singleBarChar.hasOwnProperty(project.id)) singleBarChar[project.id] = +element.time;
-                    else singleBarChar[project.id] = +element.time;
+                    singleBarChar[project.id] = +element.time;
+                    singleBarChar.hasTime = true;
                 }
             });
 
         });
+
+        //Remove  Saturday And Sunday if they equal = 0
+        if (barChar[barChar.length - 1].hasTime === false) {
+            // Remove Sunday
+            barChar.pop();
+            if (barChar[barChar.length - 1].hasTime === false) {
+                // Remove Sunday
+                barChar.pop();
+            }
+        }
 
         return {
             legend,
@@ -169,6 +180,14 @@ class DateTimeBase extends TimeBase {
         if (!date) return false;
         return this.date.isSame(date, 'day');
     }
+
+    collectDateTime(instDateTime) {
+        this.id = instDateTime.id;
+        this.project_id = instDateTime.project_id;
+        this.issue_id = instDateTime.issue_id;
+        this.descr = instDateTime.descr;
+        this.addTime(instDateTime.time);
+    }
 }
 
 class Timelog extends DateTimeBase {
@@ -197,16 +216,24 @@ class ModelBase {
 
         for (let i = 0; i < rangeDates.length; i++) {
 
-            const instDateTime = filteredArrayDateTime.find(item => {
+            let instTotalDateTime = this.totalByDates.find(item => {
                 return item.isTheSameDate(rangeDates[i])
             });
 
-            if (instDateTime) {
-                this.total.addTime(instDateTime.time);
-                this.totalByDates.push({ ...instDateTime });
-            } else {
-                this.totalByDates.push(this.createDateTime(rangeDates[i]));
+            if (!instTotalDateTime) {
+                instTotalDateTime = this.createDateTime(rangeDates[i]);
+                this.totalByDates.push(instTotalDateTime);
             }
+
+            const collArrayDateTime = filteredArrayDateTime.filter(item => {
+                return item.isTheSameDate(rangeDates[i])
+            });
+
+            if (!collArrayDateTime) continue;
+            collArrayDateTime.forEach(item => {
+                this.total.addTime(item.time);
+                instTotalDateTime.collectDateTime(item);
+            });
         }
     }
 

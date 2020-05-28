@@ -48,7 +48,7 @@ export default function DeleteFormProject({ project, handleHide }) {
 
     const handleDelete = () => {
         deleteProject({
-            variables: { id: project.id },
+            variables: { id: project.id, deleteChild: true },
             update: updateCache,
         });
         handleHide();

@@ -6,6 +6,7 @@ export {
 export { Aggregator } from './timeUtils';
 export {
     createdTimelog,
+    createdMultiTimelogs,
     updatedTimelog,
     deletedTimelog
 } from './updater';

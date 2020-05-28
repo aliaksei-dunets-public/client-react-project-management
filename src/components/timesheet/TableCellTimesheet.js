@@ -108,9 +108,9 @@ const TableCellProject = ({ project, changedNotification }) => {
                         {`${project.name} (${project.code})`}
                     </Link>
                 </TableCell>
-                <TableCell className={classes.totalcell} align="center">{project.time}</TableCell>
+                <TableCell className={classes.totalcell} align="center">{project.total.time}</TableCell>
                 <Hidden xsDown>
-                    <TableCellProjectTimelog timeSlots={project.timeSlots.rangeDateTime} />
+                    <TableCellProjectTimelog timeSlots={project.totalByDates} />
                 </Hidden>
             </TableRow>
             {
@@ -136,10 +136,10 @@ const TableCellIssue = ({ issues, changedNotification }) => {
                                 {`${item.summary} (${item.code})`}
                             </Link>
                         </TableCell>
-                        <TableCell className={classes.totalcell} align="center">{item.time}</TableCell>
+                        <TableCell className={classes.totalcell} align="center">{item.total.time}</TableCell>
                         <Hidden xsDown>
                             {
-                                item.timeSlots.rangeDateTime.map((item) =>
+                                item.totalByDates.map((item) =>
                                     <EditCellTime timelog={item} changedNotification={changedNotification} />
                                 )
                             }
@@ -173,13 +173,13 @@ const EditCellTime = ({ timelog, changedNotification }) => {
 
         if (time !== timelog.time) {
 
-            if (timelog.timelog_id) {
+            if (timelog.id) {
                 if (time) {
                     updateMutation({
                         variables: {
-                            id: timelog.timelog_id,
+                            id: timelog.id,
                             input: {
-                                dateLog: timelog.date,
+                                // dateLog: timelog.date,
                                 valueLog: parseFloat(time),
                             }
                         }
@@ -187,7 +187,7 @@ const EditCellTime = ({ timelog, changedNotification }) => {
                 } else {
                     deleteMutation({
                         variables: {
-                            id: timelog.timelog_id
+                            id: timelog.id
                         }
                     });
                 }
