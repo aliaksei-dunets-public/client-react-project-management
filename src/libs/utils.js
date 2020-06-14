@@ -43,7 +43,7 @@ export const generateSimpleBarChart = (theme, startDate, endDate, apiData) => {
     aggregator.getTimeslots().forEach((item, index) => {
         barChar.push({
             index,
-            point: window.innerWidth <= 600 ? moment.weekdaysShort(true, index + 1) : moment.weekdays(true, index + 1),
+            point: window.innerWidth <= 600 ? moment.weekdaysShort(index + 1) : moment.weekdays(index + 1),
             date: item.date,
             hasTime: false,
         })
@@ -70,7 +70,7 @@ export const generateSimpleBarChart = (theme, startDate, endDate, apiData) => {
     });
 
     //Remove  Saturday And Sunday if they equal = 0
-    if (barChar[barChar.length - 1].hasTime === false) {
+    if (barChar.length > 0 && barChar[barChar.length - 1].hasTime === false) {
         // Remove Sunday
         barChar.pop();
         if (barChar[barChar.length - 1].hasTime === false) {
