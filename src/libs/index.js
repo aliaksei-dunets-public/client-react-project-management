@@ -1,12 +1,4 @@
+export { generateTimesheet, generateSimpleBarChart, Aggregator } from './utils';
 export {
-    getArray4DateRange,
-    generateTimesheet,
-    generateSimpleBar
-} from './utils';
-export { Aggregator } from './timeUtils';
-export {
-    createdTimelog,
-    createdMultiTimelogs,
-    updatedTimelog,
-    deletedTimelog
+    TimelogCacheUpdater
 } from './updater';

@@ -1,6 +1,7 @@
 import React from 'react';
 import { useQuery } from '@apollo/react-hooks';
 import { makeStyles } from '@material-ui/core/styles';
+import { useTheme } from '@material-ui/core/styles';
 import {
     ResponsiveContainer,
     BarChart,
@@ -14,7 +15,7 @@ import {
 import moment from 'moment';
 
 import { TIMESHEET_SET } from '../../config/gqls';
-import { Aggregator } from '../../libs';
+import { generateSimpleBarChart } from '../../libs';
 import {
     LoadingComponent,
     ErrorServiceComponent,
@@ -24,19 +25,20 @@ const styles = makeStyles(theme => ({
     root: {
         [theme.breakpoints.up('xs')]: {
             width: '50%',
-            height: 500
+            height: 500,
+            paddingRight: '8px'
         },
         [theme.breakpoints.down('xs')]: {
-            width: '100%',
+            width: '90%',
             height: 400
         },
-
     },
 }));
 
 const SimpleBarChart = () => {
 
     const classes = styles();
+    const theme = useTheme();
 
     const startDate = moment().startOf('isoWeek').format('YYYY-MM-DD');
     const endDate = moment().endOf('isoWeek').format('YYYY-MM-DD');
@@ -52,10 +54,7 @@ const SimpleBarChart = () => {
     if (loading) return <LoadingComponent loading={loading} />;
     if (error) return <ErrorServiceComponent error={error} />;
 
-    const aggregator = new Aggregator(startDate, endDate);
-    const simpleBarData = aggregator.buildTimelogs(data.timesheet.timelogs)
-        .buildProjects(data.timesheet.projects)
-        .getSimpleBarChart();
+    const { legend, barChar } = generateSimpleBarChart(theme, startDate, endDate, data.timesheet);
 
     return (
         <div className={classes.root}>
@@ -63,7 +62,7 @@ const SimpleBarChart = () => {
                 <BarChart
                     // width={600}
                     // height={500}
-                    data={simpleBarData.barChar}
+                    data={barChar}
                     margin={{
                         top: 10, right: 5, left: 5, bottom: 5,
                     }}
@@ -74,7 +73,7 @@ const SimpleBarChart = () => {
                     <Tooltip />
                     <Legend />
                     {
-                        simpleBarData.legend.map((item) => (
+                        legend.map((item) => (
                             <Bar
                                 key={item.id}
                                 stackId="project"
