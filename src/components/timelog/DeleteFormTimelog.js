@@ -6,7 +6,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 
 import { useMutation } from '@apollo/react-hooks';
 import { DELETE_TIMELOG } from '../../config/gqls';
-import { deletedTimelog } from '../../libs';
+import { TimelogCacheUpdater } from '../../libs';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -33,7 +33,7 @@ export default function DeleteFormTimelog({ timelog, handleHide }) {
     const handleDelete = () => {
         deleteMutation({
             variables: { id: timelog.id },
-            update: deletedTimelog,
+            update: new TimelogCacheUpdater(true).deleted,
         });
         handleHide();
     }

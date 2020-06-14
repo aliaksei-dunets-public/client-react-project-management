@@ -111,8 +111,8 @@ const UPDATE_PROJECT = gql`
 `;
 
 const DELETE_PROJECT = gql`
-    mutation deleteProject($id:ID!) {
-        deleteProject(id:$id) {
+    mutation deleteProject($id:ID!,$deleteChild:Boolean) {
+        deleteProject(id:$id,deleteChild:$deleteChild) {
             id
             code
             name
@@ -161,8 +161,8 @@ const UPDATE_ISSUE = gql`
 `;
 
 const DELETE_ISSUE = gql`
-    mutation deleteIssue($id:ID!) {
-        deleteIssue(id:$id) {
+    mutation deleteIssue($id:ID!,$deleteChild:Boolean) {
+        deleteIssue(id:$id,deleteChild:$deleteChild) {
             id
             project_id
             code
@@ -183,6 +183,15 @@ const GET_TIMELOG_SET = gql`
 const CREATE_TIMELOG = gql`
     mutation createTimelog($input:TimelogCreate) {
         createTimelog(input:$input) {
+            ...FragmentTimelog
+        }        
+    }
+    ${FRAGMENT.fragments.TIMELOG_COMMON}
+`;
+
+const CREATE_MULTI_TIMELOG = gql`
+    mutation createMultiTimelogs($input:[TimelogCreate]) {
+        createMultiTimelogs(input:$input) {
             ...FragmentTimelog
         }        
     }
@@ -246,6 +255,7 @@ export {
     DELETE_ISSUE,
     GET_TIMELOG_SET,
     CREATE_TIMELOG,
+    CREATE_MULTI_TIMELOG,
     UPDATE_TIMELOG,
     DELETE_TIMELOG,
     TIMESHEET_SET,

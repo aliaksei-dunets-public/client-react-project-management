@@ -26,7 +26,7 @@ function Content() {
           <Route path={nav.home.path} exact>
             <HomePage />
           </Route>
-          <Route path={nav.projects.path} exact>
+          <Route path={nav.projects.path} >
             <PageProjects />
           </Route>
           <Route path={`${nav.project.path}/:id`}>
@@ -35,28 +35,28 @@ function Content() {
           <Route path={`${nav.dashboard.path}/:id`}>
             <DashboardProject />
           </Route>
-          <Route path={nav.issues.path} exact>
+          <Route path={nav.issues.path} >
             <PageIssues />
           </Route>
-          <Route path={`${nav.issue.path}/:id`} exact>
+          <Route path={`${nav.issue.path}/:id`} >
             <Detailssue />
           </Route>
-          <Route path={nav.timelogs.path} exact>
+          <Route path={nav.timelogs.path} >
             <PageTimelogs />
           </Route>
-          <Route path={nav.timesheet.path} exact>
+          <Route path={nav.timesheet.path} >
             <PageTimesheet />
           </Route>
-          <Route path={nav.projections.path} exact>
+          <Route path={nav.projections.path} >
             <PageProjections />
           </Route>
-          <Route path={nav.versions.path} exact>
+          <Route path={nav.versions.path} >
             <PageVersions />
           </Route>
-          <Route path={nav.stories.path} exact>
+          <Route path={nav.stories.path} >
             <PageStories />
           </Route>
-          <Route path={nav.tasks.path} exact>
+          <Route path={nav.tasks.path} >
             <PageTasks />
           </Route>
         </Switch>

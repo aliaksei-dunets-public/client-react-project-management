@@ -12,7 +12,7 @@ import Paper from '@material-ui/core/Paper';
 import Hidden from '@material-ui/core/Hidden';
 
 import { TIMESHEET_SET } from '../../config/gqls';
-import { generateTimesheet, Aggregator } from '../../libs';
+import { generateTimesheet } from '../../libs';
 import {
     LoadingComponent,
     ErrorServiceComponent,
@@ -38,28 +38,24 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const QueryTimesheet = ({ startDate, endDate }) => {
+const QueryTimesheet = ({ dates }) => {
 
-    const classes = useStyles();
+    const classes = useStyles();  
 
-    const { loading, error, data, refetch } = useQuery(
+    const { loading, error, data, refetch, networkStatus } = useQuery(
         TIMESHEET_SET,
         {
-            variables: { startDate, endDate },
-            fetchPolicy: 'no-cache'
+            variables: dates,
+            fetchPolicy: 'no-cache',
+            notifyOnNetworkStatusChange: true
         },
     );
 
-    if (loading) return <LoadingComponent />
-    if (error) return <ErrorServiceComponent />
+    if (networkStatus === 4) return <LoadingComponent />;
+    if (loading) return <LoadingComponent />;
+    if (error) return <ErrorServiceComponent />;
 
-    const timesheetData = generateTimesheet(data.timesheet, startDate, endDate);
-
-    const aggregator = new Aggregator(startDate, endDate);
-    const timesheetData_new = aggregator.buildTimelogs(data.timesheet.timelogs)
-        .buildIssues(data.timesheet.issues)
-        .buildProjects(data.timesheet.projects)
-        .getTimesheet();
+    const { projects, timeslots } = generateTimesheet(dates.startDate, dates.endDate, data.timesheet);
 
     return (
         <div className={classes.root}>
@@ -71,13 +67,13 @@ const QueryTimesheet = ({ startDate, endDate }) => {
                             <TableCell className={classes.headerTable} align="center">Total</TableCell>
                             <Hidden xsDown>
                                 {
-                                    aggregator.getRangeDates().map((item) => (
+                                    timeslots.map((item) => (
                                         <TableCell
                                             className={classes.headerTable}
                                             align="center"
-                                            key={item._d}
+                                            key={item.date._d}
                                         >
-                                            {item.format('MMM-DD, ddd')}
+                                            {item.date.format('DD MMM, ddd')}
                                         </TableCell>
                                     ))
                                 }
@@ -85,7 +81,7 @@ const QueryTimesheet = ({ startDate, endDate }) => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        <TableCellTimesheet projects={timesheetData.timesheet} changedNotification={refetch} />
+                        <TableCellTimesheet projects={projects} changedNotification={refetch} />
                     </TableBody>
                 </Table>
             </TableContainer>
@@ -95,8 +91,7 @@ const QueryTimesheet = ({ startDate, endDate }) => {
 }
 
 QueryTimesheet.propTypes = {
-    startDate: PropTypes.object.isRequired,
-    endDate: PropTypes.object.isRequired,
+    dates: PropTypes.object.isRequired,
 };
 
 export default QueryTimesheet;

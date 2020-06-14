@@ -11,8 +11,8 @@ import MomentUtils from '@date-io/moment';
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
 
 import { useMutation } from "@apollo/react-hooks";
-import { CREATE_TIMELOG } from '../../config/gqls';
-import { createdTimelog } from '../../libs';
+import { CREATE_TIMELOG, CREATE_MULTI_TIMELOG } from '../../config/gqls';
+import { TimelogCacheUpdater } from '../../libs';
 
 const styles = makeStyles(theme => ({
     root: {
@@ -40,6 +40,18 @@ const CreateFormTimelog = ({ issue, handleCloseDialog }) => {
     const [descr, setDescr] = React.useState('');
     const [isPeriod, setIsPeriod] = React.useState(false);
 
+    const updaterTimelog = new TimelogCacheUpdater(true);
+
+    const [createSingleTimelog] = useMutation(
+        CREATE_TIMELOG, {
+        update: updaterTimelog.createdSingle
+    });
+
+    const [createMultiTimelogs] = useMutation(
+        CREATE_MULTI_TIMELOG, {
+        update: updaterTimelog.createdMulti
+    });
+
     moment.updateLocale("en", {
         week: {
             dow: 1, // First day of week is Monday
@@ -50,28 +62,44 @@ const CreateFormTimelog = ({ issue, handleCloseDialog }) => {
         handleCloseDialog();
     }
 
-    const handleSave = async (callMutation) => {
+    const handleSave = () => {
 
-        let valueDate = null;
+        if (isPeriod) {
+            const arrayBody = [];
+            const start = moment(startDate);
+            const end = moment(endDate);
 
-        // if (isPeriod) {
-        // body.startDate = moment(this.state.startDate);
-        // body.endDate = moment(this.state.endDate);
-        // } else {
-        valueDate = moment(startDate);
-        // }
+            const diffDates = end.diff(start, 'days') + 1;
 
-        callMutation({
-            variables: {
-                input: {
+            for (let i = 0; i < diffDates; i++) {
+                arrayBody.push({
                     project_id: issue.project_id,
                     issue_id: issue.id,
-                    dateLog: valueDate,
                     valueLog: parseFloat(valueLog),
-                    descr,
-                }
+                    dateLog: start.clone().add(i, 'days'),
+                    descr
+                });
             }
-        })
+
+            createMultiTimelogs({
+                variables: {
+                    input: arrayBody
+                }
+            });
+
+        } else {
+            createSingleTimelog({
+                variables: {
+                    input: {
+                        project_id: issue.project_id,
+                        issue_id: issue.id,
+                        dateLog: moment(startDate),
+                        valueLog: parseFloat(valueLog),
+                        descr,
+                    }
+                }
+            });
+        }
 
         handleCloseDialog();
     }
@@ -97,11 +125,6 @@ const CreateFormTimelog = ({ issue, handleCloseDialog }) => {
                 break;
         }
     }
-
-    const [create] = useMutation(
-        CREATE_TIMELOG, {
-        update: createdTimelog
-    });
 
     return (
         <>
@@ -176,7 +199,7 @@ const CreateFormTimelog = ({ issue, handleCloseDialog }) => {
             </FormControl>
             <div className={classes.buttons}>
                 <Button color="primary" onClick={handleClose}>Cancel</Button>
-                <Button color="primary" onClick={() => { handleSave(create) }} >Save</Button>
+                <Button color="primary" onClick={handleSave} >Save</Button>
             </div>
         </>
     );

@@ -11,7 +11,7 @@ import TextField from '@material-ui/core/TextField';
 import Hidden from '@material-ui/core/Hidden';
 
 import { CREATE_TIMELOG, UPDATE_TIMELOG, DELETE_TIMELOG } from '../../config/gqls';
-import { createdTimelog, updatedTimelog, deletedTimelog } from '../../libs';
+import { TimelogCacheUpdater } from '../../libs';
 
 const useStyles = makeStyles(theme => ({
     project: {
@@ -69,9 +69,10 @@ const TableCellTimesheet = ({ projects, changedNotification }) => {
     return (
         <>
             {
-                projects.map((item) => (
+                projects.map((project) => (
                     <TableCellProject
-                        project={item}
+                        key={project.id}
+                        project={project}
                         changedNotification={changedNotification}
                     />
                 ))
@@ -108,9 +109,9 @@ const TableCellProject = ({ project, changedNotification }) => {
                         {`${project.name} (${project.code})`}
                     </Link>
                 </TableCell>
-                <TableCell className={classes.totalcell} align="center">{project.time}</TableCell>
+                <TableCell className={classes.totalcell} align="center">{project.total.time}</TableCell>
                 <Hidden xsDown>
-                    <TableCellProjectTimelog timeSlots={project.timeSlots.rangeDateTime} />
+                    <TableCellProjectTimelog project_id={project.id} timeslots={project.timeslots} />
                 </Hidden>
             </TableRow>
             {
@@ -129,18 +130,24 @@ const TableCellIssue = ({ issues, changedNotification }) => {
     return (
         <>
             {
-                issues.map((item) => (
-                    <TableRow key={item.id}>
+                issues.map((issue) => (
+                    <TableRow key={issue.id}>
                         <TableCell className={classes.Issue} align="left">
-                            <Link to={`/Issue/${item.id}`}>
-                                {`${item.summary} (${item.code})`}
+                            <Link to={`/Issue/${issue.id}`}>
+                                {`${issue.summary} (${issue.code})`}
                             </Link>
                         </TableCell>
-                        <TableCell className={classes.totalcell} align="center">{item.time}</TableCell>
+                        <TableCell className={classes.totalcell} align="center">{issue.total.time}</TableCell>
                         <Hidden xsDown>
                             {
-                                item.timeSlots.rangeDateTime.map((item) =>
-                                    <EditCellTime timelog={item} changedNotification={changedNotification} />
+                                issue.timeslots.map((item) =>
+                                    <EditCellTime
+                                        key={`${issue.id}-${item.date._d}`}
+                                        project_id={issue.project_id}
+                                        issue_id={issue.id}
+                                        timelog={item}
+                                        changedNotification={changedNotification}
+                                    />
                                 )
                             }
                         </Hidden>
@@ -151,15 +158,17 @@ const TableCellIssue = ({ issues, changedNotification }) => {
     );
 }
 
-const EditCellTime = ({ timelog, changedNotification }) => {
+const EditCellTime = ({ project_id, issue_id, timelog, changedNotification }) => {
     const classes = useStyles();
 
     const [time, setTime] = useState(timelog.time);
     const [editMode, setEditMode] = useState(false);
 
-    const [createMutation] = useMutation(CREATE_TIMELOG, { update: createdTimelog });
-    const [updateMutation] = useMutation(UPDATE_TIMELOG, { update: updatedTimelog });
-    const [deleteMutation] = useMutation(DELETE_TIMELOG, { update: deletedTimelog });
+    const updaterTimelog = new TimelogCacheUpdater(false);
+
+    const [createMutation] = useMutation(CREATE_TIMELOG, { update: updaterTimelog.createdSingle });
+    const [updateMutation] = useMutation(UPDATE_TIMELOG, { update: updaterTimelog.updated });
+    const [deleteMutation] = useMutation(DELETE_TIMELOG, { update: updaterTimelog.deleted });
 
     const handleDoubleClick = () => {
         setEditMode(true);
@@ -169,34 +178,35 @@ const EditCellTime = ({ timelog, changedNotification }) => {
         setTime(event.currentTarget.value);
     }
 
-    const handleBlur = async (event) => {
+    const handleBlur = async () => {
+
+        setEditMode(false);
 
         if (time !== timelog.time) {
 
-            if (timelog.timelog_id) {
+            if (timelog.id) {
                 if (time) {
-                    updateMutation({
+                    await updateMutation({
                         variables: {
-                            id: timelog.timelog_id,
+                            id: timelog.id,
                             input: {
-                                dateLog: timelog.date,
                                 valueLog: parseFloat(time),
                             }
                         }
-                    })
+                    });
                 } else {
-                    deleteMutation({
+                    await deleteMutation({
                         variables: {
-                            id: timelog.timelog_id
+                            id: timelog.id
                         }
                     });
                 }
             } else {
-                createMutation({
+                await createMutation({
                     variables: {
                         input: {
-                            project_id: timelog.project_id,
-                            issue_id: timelog.issue_id,
+                            project_id,
+                            issue_id,
                             dateLog: timelog.date,
                             valueLog: parseFloat(time),
                         }
@@ -204,10 +214,9 @@ const EditCellTime = ({ timelog, changedNotification }) => {
                 });
             }
 
+
             changedNotification();
         }
-
-        setEditMode(false);
     }
 
     return (
@@ -231,14 +240,20 @@ const EditCellTime = ({ timelog, changedNotification }) => {
     );
 }
 
-const TableCellProjectTimelog = ({ timeSlots }) => {
+const TableCellProjectTimelog = ({ project_id, timeslots }) => {
     const classes = useStyles();
 
     return (
         <>
             {
-                timeSlots.map((item) =>
-                    <TableCell className={classes.totalcell} align="center">{item.time}</TableCell>
+                timeslots.map((item) =>
+                    <TableCell
+                        key={`${project_id}-${item.date._d}`}
+                        className={classes.totalcell}
+                        align="center"
+                    >
+                        {item.time}
+                    </TableCell>
                 )
             }
         </>
