@@ -4,12 +4,18 @@ import Hidden from '@material-ui/core/Hidden';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
-// import InputBase from '@material-ui/core/InputBase';
-import { fade, makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import MenuIcon from '@material-ui/icons/Menu';
-// import SearchIcon from '@material-ui/icons/Search';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
 import Button from '@material-ui/core/Button';
 import { useHistory } from "react-router-dom";
+
+// import BottomNavigation from '@material-ui/core/BottomNavigation';
+// import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
+// import RestoreIcon from '@material-ui/icons/Restore';
+// import FavoriteIcon from '@material-ui/icons/Favorite';
+// import LocationOnIcon from '@material-ui/icons/LocationOn';
 
 import { nav } from '../../config/constants';
 import ToolbarMenuProject from '../project/ToolbarMenuProject';
@@ -18,12 +24,10 @@ import ToolbarMenuProject from '../project/ToolbarMenuProject';
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        flexGrow: 1,
         marginBottom: theme.spacing(1),
     },
     menuButton: {
-        marginRight: theme.spacing(2),
-        justifyContent: 'end'
+        marginLeft: theme.spacing(2),
     },
     title: {
         flexGrow: 1,
@@ -31,51 +35,22 @@ const useStyles = makeStyles((theme) => ({
         [theme.breakpoints.up('sm')]: {
             display: 'block',
         },
-    },
-    search: {
-        position: 'relative',
-        borderRadius: theme.shape.borderRadius,
-        backgroundColor: fade(theme.palette.common.white, 0.15),
-        '&:hover': {
-            backgroundColor: fade(theme.palette.common.white, 0.25),
-        },
-        marginLeft: 0,
-        width: '100%',
-        [theme.breakpoints.up('sm')]: {
-            marginLeft: theme.spacing(1),
-            width: 'auto',
-        },
-    },
-    searchIcon: {
-        padding: theme.spacing(0, 2),
-        height: '100%',
-        position: 'absolute',
-        pointerEvents: 'none',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    inputRoot: {
-        color: 'inherit',
-    },
-    inputInput: {
-        padding: theme.spacing(1, 1, 1, 0),
-        // vertical padding + font size from searchIcon
-        paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
-        transition: theme.transitions.create('width'),
-        width: '100%',
-        [theme.breakpoints.up('sm')]: {
-            width: '12ch',
-            '&:focus': {
-                width: '20ch',
-            },
-        },
-    },
+    }
 }));
 
 export default function ToolbarComponent() {
     const history = useHistory();
     const classes = useStyles();
+
+    const [anchorEl, setAnchorEl] = React.useState(null);
+
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
 
     return (
         <div className={classes.root}>
@@ -88,19 +63,6 @@ export default function ToolbarComponent() {
 
                     <ToolbarMenuProject />
 
-                    {/* <MenuComponent
-                        id={nav.projects.path}
-                        name={nav.projects.name}
-                        items={[
-                            { key: 'active_projects', name: 'Active Projects', handle: () => { history.push(nav.projects.path) } },
-                            { key: 'all_projects', name: 'All Projects', handle: () => { history.push(nav.projects.path) } }
-                        ]}
-                    /> */}
-
-                    {/* <Button color="inherit" onClick={() => { history.push(nav.projects.path) }}>
-                        {nav.projects.name}
-                    </Button> */}
-
                     <Button color="inherit" onClick={() => { history.push(nav.issues.path) }}>
                         {nav.issues.name}
                     </Button>
@@ -108,50 +70,116 @@ export default function ToolbarComponent() {
                         <Button color="inherit" onClick={() => { history.push(nav.timelogs.path) }}>
                             {nav.timelogs.name}
                         </Button>
-
                         <Button color="inherit" onClick={() => { history.push(nav.timesheet.path) }}>
                             {nav.timesheet.name}
                         </Button>
-
+                    </Hidden>
+                    <Hidden smDown>
                         <Button color="inherit" onClick={() => { history.push(nav.projections.path) }}>
                             {nav.projections.name}
                         </Button>
                         <Button color="inherit" onClick={() => { history.push(nav.versions.path) }}>
                             {nav.versions.name}
                         </Button>
+                    </Hidden>
+                    <Hidden mdDown>
                         <Button color="inherit" onClick={() => { history.push(nav.stories.path) }}>
                             {nav.stories.name}
                         </Button>
-                    </Hidden>
-                    <Hidden smDown>
                         <Button color="inherit" onClick={() => { history.push(nav.tasks.path) }}>
                             {nav.tasks.name}
                         </Button>
                     </Hidden>
-                    <Hidden mdUp>
+                    <Hidden lgUp>
                         <IconButton
                             edge="start"
                             className={classes.menuButton}
                             color="inherit"
                             aria-label="open drawer"
+                            onClick={handleClick}
                         >
                             <MenuIcon />
                         </IconButton>
-                    </Hidden>
 
-                    {/* <div className={classes.search}>
-                        <div className={classes.searchIcon}>
-                            <SearchIcon />
-                        </div>
-                        <InputBase
-                            placeholder="Search…"
-                            classes={{
-                                root: classes.inputRoot,
-                                input: classes.inputInput,
+                        <Menu
+                            id="mobileMenu"
+                            anchorEl={anchorEl}
+                            keepMounted
+                            open={Boolean(anchorEl)}
+                            onClose={handleClose}
+                        >
+                            <Hidden smUp>
+                                <MenuItem
+                                    onClick={() => {
+                                        handleClose();
+                                        history.push(nav.timelogs.path);
+                                    }}
+                                >
+                                    {nav.timelogs.name}
+                                </MenuItem>
+
+                                <MenuItem
+                                    onClick={() => {
+                                        handleClose();
+                                        history.push(nav.timesheet.path)
+                                    }}
+                                >
+                                    {nav.timesheet.name}
+                                </MenuItem>
+                            </Hidden>
+
+                            <Hidden mdUp>
+                                <MenuItem
+                                    onClick={() => {
+                                        handleClose();
+                                        history.push(nav.projections.path);
+                                    }}
+                                >
+                                    {nav.projections.name}
+                                </MenuItem>
+
+                                <MenuItem
+                                    onClick={() => {
+                                        handleClose();
+                                        history.push(nav.versions.path);
+                                    }}
+                                >
+                                    {nav.versions.name}
+                                </MenuItem>
+                            </Hidden>
+
+                            <MenuItem
+                                onClick={() => {
+                                    handleClose();
+                                    history.push(nav.stories.path);
+                                }}
+                            >
+                                {nav.stories.name}
+                            </MenuItem>
+
+                            <MenuItem
+                                onClick={() => {
+                                    handleClose();
+                                    history.push(nav.tasks.path);
+                                }}
+                            >
+                                {nav.tasks.name}
+                            </MenuItem>
+                        </Menu>
+
+                        {/* <BottomNavigation
+                            value={value}
+                            onChange={(event, newValue) => {
+                                setValue(newValue);
                             }}
-                            inputProps={{ 'aria-label': 'search' }}
-                        />
-                    </div> */}
+                            showLabels
+                            className={classes.bottomNavigation}
+                        >
+                            <BottomNavigationAction label="Recents" icon={<RestoreIcon />} />
+                            <BottomNavigationAction label="Favorites" icon={<FavoriteIcon />} />
+                            <BottomNavigationAction label="Nearby" icon={<LocationOnIcon />} />
+                        </BottomNavigation> */}
+                    </Hidden>
                 </Toolbar>
             </AppBar>
         </div >

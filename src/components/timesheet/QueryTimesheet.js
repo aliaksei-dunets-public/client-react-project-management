@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import { useQuery } from '@apollo/react-hooks';
@@ -35,27 +35,40 @@ const useStyles = makeStyles(theme => ({
         borderStyle: 'solid',
         borderColor: 'rgb(224,224,224)',
         fontSize: '0.8rem',
+    },
+    headerWeekend: {
+        borderWidth: 1,
+        borderStyle: 'solid',
+        borderColor: 'rgb(224,224,224)',
+        fontSize: '0.8rem',
+        opacity: 0.5,
     }
 }));
 
 const QueryTimesheet = ({ dates }) => {
 
-    const classes = useStyles();  
+    const classes = useStyles();
+
+    const [projects, setProjects] = useState([]);
+    const [timeslots, setTimeslots] = useState([]);
 
     const { loading, error, data, refetch, networkStatus } = useQuery(
         TIMESHEET_SET,
         {
             variables: dates,
             fetchPolicy: 'no-cache',
-            notifyOnNetworkStatusChange: true
+            notifyOnNetworkStatusChange: true,
+            onCompleted: () => {
+                const timesheet = generateTimesheet(dates.startDate, dates.endDate, data.timesheet);
+                setProjects(timesheet.projects);
+                setTimeslots(timesheet.timeslots);
+            }
         },
     );
 
-    if (networkStatus === 4) return <LoadingComponent />;
-    if (loading) return <LoadingComponent />;
-    if (error) return <ErrorServiceComponent />;
-
-    const { projects, timeslots } = generateTimesheet(dates.startDate, dates.endDate, data.timesheet);
+    if (networkStatus === 4) return <LoadingComponent loading={networkStatus === 4} />;
+    if (loading) return <LoadingComponent loading={loading} />;
+    if (error) return <ErrorServiceComponent error={error} />;
 
     return (
         <div className={classes.root}>
@@ -69,7 +82,7 @@ const QueryTimesheet = ({ dates }) => {
                                 {
                                     timeslots.map((item) => (
                                         <TableCell
-                                            className={classes.headerTable}
+                                            className={item.weekend ? classes.headerWeekend : classes.headerTable}
                                             align="center"
                                             key={item.date._d}
                                         >

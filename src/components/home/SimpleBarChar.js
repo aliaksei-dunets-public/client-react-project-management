@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useQuery } from '@apollo/react-hooks';
 import { makeStyles } from '@material-ui/core/styles';
-import { useTheme } from '@material-ui/core/styles';
 import {
     ResponsiveContainer,
     BarChart,
@@ -28,9 +27,13 @@ const styles = makeStyles(theme => ({
             height: 500,
             paddingRight: '8px'
         },
+        [theme.breakpoints.down('md')]: {
+            width: '50%',
+            height: 280
+        },
         [theme.breakpoints.down('xs')]: {
             width: '90%',
-            height: 400
+            height: 280
         },
     },
 }));
@@ -38,7 +41,9 @@ const styles = makeStyles(theme => ({
 const SimpleBarChart = () => {
 
     const classes = styles();
-    const theme = useTheme();
+
+    const [legend, setLegend] = useState([]);
+    const [barChar, setBarChar] = useState([]);
 
     const startDate = moment().startOf('isoWeek').format('YYYY-MM-DD');
     const endDate = moment().endOf('isoWeek').format('YYYY-MM-DD');
@@ -47,14 +52,17 @@ const SimpleBarChart = () => {
         TIMESHEET_SET,
         {
             variables: { startDate, endDate },
-            fetchPolicy: 'no-cache'
+            fetchPolicy: 'no-cache',
+            onCompleted: () => {
+                const barData = generateSimpleBarChart(startDate, endDate, data.timesheet);
+                setLegend(barData.legend);
+                setBarChar(barData.barChar);
+            }
         },
     );
 
     if (loading) return <LoadingComponent loading={loading} />;
     if (error) return <ErrorServiceComponent error={error} />;
-
-    const { legend, barChar } = generateSimpleBarChart(theme, startDate, endDate, data.timesheet);
 
     return (
         <div className={classes.root}>
