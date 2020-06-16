@@ -37,6 +37,7 @@ FRAGMENT.fragments = {
             summary
             descr
             status
+            priority
             external_code
             external_url  
         }     
