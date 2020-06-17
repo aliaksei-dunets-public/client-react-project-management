@@ -9,6 +9,7 @@ import { HomePage } from '../home';
 import PageProjects from '../project/PageProjects';
 import DetailProject from '../project/DetailProject';
 import DashboardProject from '../project/DashboardProject';
+import CreateProjectPage from '../project/CreateProjectPage';
 import { PageIssues, Detailssue } from '../issue';
 import PageTimelogs from '../timelog/PageTimelogs';
 import { PageTimesheet } from '../timesheet';
@@ -34,6 +35,9 @@ function Content() {
           </Route>
           <Route path={`${nav.dashboard.path}/:id`}>
             <DashboardProject />
+          </Route>
+          <Route path={nav.create_project.path}>
+            <CreateProjectPage />
           </Route>
           <Route path={nav.issues.path} >
             <PageIssues />

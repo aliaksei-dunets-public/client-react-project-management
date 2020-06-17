@@ -76,6 +76,16 @@ const ToolbarMenuProject = () => {
                 <MenuItem
                     onClick={() => {
                         handleClose();
+                        history.push(nav.create_project.path);
+                    }}
+                >
+                    Create Project
+                </MenuItem>
+
+                <Divider />
+                <MenuItem
+                    onClick={() => {
+                        handleClose();
                         history.push(nav.projects.path);
                     }}
                 >
