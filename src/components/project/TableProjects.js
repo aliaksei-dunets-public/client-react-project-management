@@ -16,10 +16,11 @@ import ExternalLinkComponent from '../common/ExternalLinkComponent';
 import StatusComponent from '../common/StatusComponent';
 import TableRowActionComponent from '../common/TableRowActionComponent';
 import CreateDialogComponent from '../common/CreateDialogComponent';
-import CreateFormProject from './CreateFormProject';
-import UpdateFormProject from './UpdateFormProject';
-import DeleteFormProject from './DeleteFormProject';
+import CreateProjectDialog from './CreateProjectDialog';
+import UpdateProjectDialog from './UpdateProjectDialog';
+import DeleteProjectDialog from './DeleteProjectDialog';
 import DialogHandler from '../common/DialogHandler';
+import CreateFabComponent from '../common/CreateFabComponent';
 
 const useStyles = makeStyles(theme => ({
     headerTable: {
@@ -108,14 +109,22 @@ const TableProjects = ({ projects }) => {
                     </TableBody>
                 </Table>
             </TableContainer>
-            <CreateDialogComponent title="Create a new project">
-                <CreateFormProject />
-            </CreateDialogComponent>
-            <DialogUpdateComponent title={`Update the project - ${selected.name}`}>
-                <UpdateFormProject project={selected} handleHide={dialogUpdateHandler.hide} />
+
+            <Hidden mdUp>
+                <CreateFabComponent handleClick={() => history.push(nav.create_project.path)} />
+            </Hidden>
+            <Hidden smDown>
+                <CreateDialogComponent title="Create a new project">
+                    <CreateProjectDialog />
+                </CreateDialogComponent>
+            </Hidden>
+
+            <DialogUpdateComponent title={`Update project: ${selected.code}`}>
+                <UpdateProjectDialog project={selected} handleCloseDialog={dialogUpdateHandler.hide} />
             </DialogUpdateComponent>
-            <DialogDeleteComponent title={`Delete the project - ${selected.name}`}>
-                <DeleteFormProject project={selected} handleHide={dialogDeleteHandler.hide} />
+
+            <DialogDeleteComponent title={`Delete project: ${selected.code}`}>
+                <DeleteProjectDialog project={selected} handleHide={dialogDeleteHandler.hide} />
             </DialogDeleteComponent>
         </>
     );

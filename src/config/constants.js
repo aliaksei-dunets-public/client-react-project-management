@@ -71,6 +71,10 @@ module.exports = {
             name: 'CreateProject',
             path: '/CreateProject'
         },
+        update_project: {
+            name: 'UpdateProject',
+            path: '/UpdateProject'
+        },
         issues: {
             name: 'Issues',
             path: '/Issues'

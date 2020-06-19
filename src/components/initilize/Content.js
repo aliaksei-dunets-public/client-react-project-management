@@ -10,6 +10,7 @@ import PageProjects from '../project/PageProjects';
 import DetailProject from '../project/DetailProject';
 import DashboardProject from '../project/DashboardProject';
 import CreateProjectPage from '../project/CreateProjectPage';
+import UpdateProjectPage from '../project/UpdateProjectPage';
 import { PageIssues, Detailssue } from '../issue';
 import PageTimelogs from '../timelog/PageTimelogs';
 import { PageTimesheet } from '../timesheet';
@@ -38,6 +39,9 @@ function Content() {
           </Route>
           <Route path={nav.create_project.path}>
             <CreateProjectPage />
+          </Route>
+          <Route path={`${nav.update_project.path}/:id`}>
+            <UpdateProjectPage />
           </Route>
           <Route path={nav.issues.path} >
             <PageIssues />

@@ -16,11 +16,8 @@ import ToolbarDetailComponent from '../common/ToolbarDetailComponent';
 import LabelValueComponent from '../common/LabelValueComponent';
 import StatusComponent from '../common/StatusComponent';
 import ExternalLinkComponent from '../common/ExternalLinkComponent';
-// import CreateDialogComponent from '../common/CreateDialogComponent';
-// import TableIssues from '../issue/TableIssues';
-// import CreateIssue from '../issue/CreateIssue';
-import UpdateFormProject from './UpdateFormProject';
-import DeleteFormProject from './DeleteFormProject';
+import UpdateProjectDialog from './UpdateProjectDialog';
+import DeleteProjectDialog from './DeleteProjectDialog';
 import DialogHandler from '../common/DialogHandler';
 
 const useStyles = makeStyles(theme => ({
@@ -56,14 +53,13 @@ const DetailProject = () => {
                 variables={{ id }}
                 notifyOnNetworkStatusChange
             >
-                {({ loading, error, data, refetch, networkStatus }) => {
-                    if (networkStatus === 4) return 'Refetching!';
+                {({ loading, error, data}) => {
                     if (loading) return <LoadingComponent loading={loading} />;
                     if (error) return <ErrorServiceComponent error={error} />;
 
                     return (
                         <>
-                            <ToolbarDetailComponent title={`Project: ${data.project.code} - ${data.project.name}`} >
+                            <ToolbarDetailComponent title={`Project: ${data.project.code}`} >
                                 <Hidden xsDown>
                                     <Button variant="contained" color="primary" onClick={dialogUpdateHandler.show}>
                                         Edit
@@ -73,7 +69,7 @@ const DetailProject = () => {
                                 </Button>
                                 </Hidden>
                             </ToolbarDetailComponent>
-                            <LabelValueComponent label='ID' value={data.project.id} />
+                            {/* <LabelValueComponent label='ID' value={data.project.id} /> */}
                             <LabelValueComponent label='Code' value={data.project.code} />
                             <LabelValueComponent label='Name' value={data.project.name} />
                             <LabelValueComponent label='Description' value={data.project.descr} />
@@ -83,17 +79,13 @@ const DetailProject = () => {
                             <LabelValueComponent label='External' >
                                 <ExternalLinkComponent url={data.project.external_url} code={data.project.external_code} />
                             </LabelValueComponent>
-                            {/* <TableIssues issues={data.project.issues} />
-                            <CreateDialogComponent title="Create a new Issue">
-                                <CreateIssue project={data.project} />
-                            </CreateDialogComponent> */}
                             <Hidden smUp>
                                 <Fab
                                     className={classes.fabEdit}
                                     size="medium"
                                     color="primary"
                                     aria-label="edit"
-                                    onClick={dialogUpdateHandler.show}
+                                    onClick={() => history.push(`${nav.update_project.path}/${data.project.id}`)}
                                 >
                                     <EditIcon />
                                 </Fab>
@@ -107,15 +99,16 @@ const DetailProject = () => {
                                     <DeleteIcon />
                                 </Fab>
                             </Hidden>
-                            <DialogUpdateComponent title={`Update the project - ${data.project.name}`}>
-                                <UpdateFormProject project={data.project} handleHide={dialogUpdateHandler.hide} />
+                            <DialogUpdateComponent title={`Update project: ${data.project.code}`}>
+                                <UpdateProjectDialog project={data.project} handleCloseDialog={dialogUpdateHandler.hide} />
                             </DialogUpdateComponent>
-                            <DialogDeleteComponent title={`Delete the project - ${data.project.name}`}>
-                                <DeleteFormProject
+                            
+                            <DialogDeleteComponent title={`Delete project: ${data.project.code}`}>
+                                <DeleteProjectDialog
                                     project={data.project}
-                                    handleHide={() => {
+                                    handleHide={(wasDeleted) => {
                                         dialogDeleteHandler.hide();
-                                        history.push(nav.projects.path);
+                                        if (wasDeleted) history.push(nav.projects.path);
                                     }}
                                 />
                             </DialogDeleteComponent>
