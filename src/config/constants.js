@@ -29,6 +29,26 @@ const STATUSES = {
     }
 };
 
+const PRIORITY = {
+    // 1 - Critical, 2 - High, 3 - Medium, 4 - Low
+    LOW: {
+        code: 'LOW',
+        name: 'Low'
+    },
+    MEDIUM: {
+        code: 'MEDIUM',
+        name: 'Medium'
+    },
+    HIGH: {
+        code: 'HIGH',
+        name: 'High'
+    },
+    CRITICAL: {
+        code: 'CRITICAL',
+        name: 'Critical'
+    },
+}
+
 module.exports = {
     nav: {
         home: {
@@ -45,11 +65,23 @@ module.exports = {
         },
         dashboard: {
             name: 'Dashboard',
-            path: '/Project Dashboard'
+            path: '/ProjectDashboard'
+        },
+        create_project: {
+            name: 'Create Project',
+            path: '/CreateProject'
+        },
+        update_project: {
+            name: 'Update Project',
+            path: '/UpdateProject'
         },
         issues: {
             name: 'Issues',
             path: '/Issues'
+        },
+        open_issues: {
+            name: 'Open Issues',
+            path: '/OpenIssues'
         },
         issue: {
             name: 'Issue',
@@ -81,6 +113,7 @@ module.exports = {
         }
     },
     statuses: STATUSES,
+    priority: PRIORITY,
     projectStatuses: [
         STATUSES.INACTIVE,
         STATUSES.ACTIVE,
@@ -90,6 +123,12 @@ module.exports = {
         STATUSES.NEW,
         STATUSES.PROGRESS,
         STATUSES.CLOSED
+    ],
+    issuePriority: [
+        PRIORITY.LOW,
+        PRIORITY.MEDIUM,
+        PRIORITY.HIGH,
+        PRIORITY.CRITICAL
     ],
     severity: {
         success: "success",

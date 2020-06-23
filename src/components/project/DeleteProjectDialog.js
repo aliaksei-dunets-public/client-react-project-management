@@ -13,10 +13,15 @@ const styles = makeStyles(theme => ({
         '& > *': {
             margin: theme.spacing(1),
         },
-        width: 400,
+        [theme.breakpoints.up('sm')]: {
+            width: '400px',
+        },
+        [theme.breakpoints.down('sm')]: {
+            width: '100%',
+        },
     },
     buttons: {
-        width: '100%',
+        // width: '100%',
         display: 'flex',
         padding: theme.spacing(1),
         alignItems: 'center',
@@ -24,7 +29,7 @@ const styles = makeStyles(theme => ({
     }
 }));
 
-export default function DeleteFormProject({ project, handleHide }) {
+export default function DeleteProjectDialog({ project, handleHide }) {
 
     const classes = styles();
 
@@ -51,12 +56,8 @@ export default function DeleteFormProject({ project, handleHide }) {
             variables: { id: project.id, deleteChild: true },
             update: updateCache,
         });
-        handleHide();
+        handleHide(true);
     }
-
-    // const handleClose = () => {
-    //     handleHide();
-    // }
 
     return (
         <div className={classes.root}>
@@ -64,14 +65,14 @@ export default function DeleteFormProject({ project, handleHide }) {
                 During deletion of the project all issues and timelogs will be deleted too. Are you sure?
                 </DialogContentText>
             <div className={classes.buttons}>
-                <Button color="primary" onClick={handleHide}>Cancel</Button>
+                <Button color="primary" onClick={() => handleHide(false)}>Cancel</Button>
                 <Button color="primary" onClick={handleDelete} >Delete</Button>
             </div>
         </div>
     );
 };
 
-DeleteFormProject.propTypes = {
+DeleteProjectDialog.propTypes = {
     project: PropTypes.object.isRequired,
     handleHide: PropTypes.func.isRequired,
 };

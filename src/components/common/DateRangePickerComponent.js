@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
 
 import moment from 'moment';
 import 'bootstrap-daterangepicker/daterangepicker.css';
@@ -14,8 +15,20 @@ const LABEL_WEEK = 'Week';
 const LABEL_TWO_WEEKS = 'Two Weeks';
 const LABEL_MONTH = 'Month';
 
+const styles = makeStyles(theme => ({
+    buttonGroup: {
+    },
+    button: {
+            padding: theme.spacing(1),
+
+    },
+    buttonDate: {
+    },
+}));
 
 const DateRangePickerComponent = (props) => {
+
+    const classes = styles();
 
     const [startDate, setStartDate] = useState(moment().startOf('isoWeek'));
     const [endDate, setEndDate] = useState(moment().endOf('isoWeek'));
@@ -58,8 +71,8 @@ const DateRangePickerComponent = (props) => {
     }
 
     return (
-        <ButtonGroup size="large" color="primary" aria-label="outlined primary button group">
-            <Button endIcon={<ArrowBackIosIcon />} onClick={handleBackButton} />
+        <ButtonGroup className={classes.buttonGroup} size="large" color="primary">
+            <Button className={classes.button} variant="outlined" color="primary" endIcon={<ArrowBackIosIcon />} onClick={handleBackButton} />
             <DateRangePicker
                 onApply={handleDateRangePickerApply}
                 startDate={startDate}
@@ -71,11 +84,11 @@ const DateRangePickerComponent = (props) => {
                     firstDay: 1
                 }}
             >
-                <Button size="large" variant="outlined" color="primary">
+                <Button className={classes.buttonDate} size="large" variant="outlined" color="primary">
                     {`${moment(startDate).format(DISPLAY_FORMAT)} - ${moment(endDate).format(DISPLAY_FORMAT)}`}
                 </Button>
             </DateRangePicker>
-            <Button variant="outlined" color="primary" startIcon={<ArrowForwardIosIcon />} onClick={handleNextButton} />
+            <Button className={classes.button} variant="outlined" color="primary" startIcon={<ArrowForwardIosIcon />} onClick={handleNextButton} />
         </ButtonGroup>
     );
 }

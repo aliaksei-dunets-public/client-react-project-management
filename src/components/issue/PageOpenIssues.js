@@ -2,13 +2,14 @@ import React from 'react';
 import { Query } from "react-apollo";
 
 import { GET_ISSUE_SET } from '../../config/gqls';
+import { statuses } from '../../config/constants';
 import TableIssues from './TableIssues';
 import {
     LoadingComponent,
     ErrorServiceComponent,
 } from '../common';
 
-const PageIssue = () => {
+const PageOpenIssue = () => {
     return (
         <Query
             query={GET_ISSUE_SET}
@@ -17,9 +18,11 @@ const PageIssue = () => {
                 if (loading) return <LoadingComponent loading={loading} />;
                 if (error) return <ErrorServiceComponent error={error}/>;
 
+                const openIssues = data.issues.filter((item) => item.status === statuses.NEW.code || item.status === statuses.PROGRESS.code);
+
                 return (
                     <>
-                        <TableIssues issues={data.issues} />
+                        <TableIssues issues={openIssues} />
                     </>
                 );
             }}
@@ -27,4 +30,4 @@ const PageIssue = () => {
     );
 }
 
-export default PageIssue;
+export default PageOpenIssue;

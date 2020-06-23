@@ -1,4 +1,5 @@
 export { generateTimesheet, generateSimpleBarChart, Aggregator } from './utils';
 export {
-    TimelogCacheUpdater
+    TimelogCacheUpdater,
+    projectUpdater
 } from './updater';

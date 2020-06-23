@@ -7,7 +7,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 
 import { Mutation } from '@apollo/react-components';
-import { issueStatuses, severity } from '../../config/constants';
+import { issueStatuses, issuePriority, severity } from '../../config/constants';
 import { GET_ISSUE_SET, CREATE_ISSUE, GET_PROJECT_ISSUE_SET } from '../../config/gqls';
 
 const styles = makeStyles(theme => ({
@@ -33,6 +33,7 @@ const CreateIssue = ({ project, handleCloseDialog }) => {
     const [summary, setSummary] = React.useState('');
     const [descr, setDescr] = React.useState('');
     const [status, setStatus] = React.useState(issueStatuses[0].code || '');
+    const [priority, setPriority] = React.useState(issuePriority[0].code || '');
     const [external_code, setExternalCode] = React.useState('');
     const [external_url, setExternalUrl] = React.useState(project.external_url || '');
 
@@ -49,6 +50,7 @@ const CreateIssue = ({ project, handleCloseDialog }) => {
                     summary,
                     descr,
                     status,
+                    priority,
                     external_code,
                     external_url,
                 }
@@ -68,6 +70,9 @@ const CreateIssue = ({ project, handleCloseDialog }) => {
                 break;
             case 'status':
                 setStatus(event.target.value);
+                break;
+            case 'priority':
+                setPriority(event.target.value);
                 break;
             case 'external_code':
                 setExternalCode(event.target.value);
@@ -151,6 +156,22 @@ const CreateIssue = ({ project, handleCloseDialog }) => {
                             required
                         >
                             {issueStatuses.map(option => (
+                                <MenuItem key={option.code} value={option.code}>
+                                    {option.name}
+                                </MenuItem>
+                            ))}
+                        </TextField>
+                        <TextField
+                            id="priority"
+                            label="Priority"
+                            name="priority"
+                            value={priority}
+                            onChange={handleChange}
+                            select
+                            fullWidth
+                            required
+                        >
+                            {issuePriority.map(option => (
                                 <MenuItem key={option.code} value={option.code}>
                                     {option.name}
                                 </MenuItem>

@@ -9,7 +9,9 @@ import { HomePage } from '../home';
 import PageProjects from '../project/PageProjects';
 import DetailProject from '../project/DetailProject';
 import DashboardProject from '../project/DashboardProject';
-import { PageIssues, Detailssue } from '../issue';
+import CreateProjectPage from '../project/CreateProjectPage';
+import UpdateProjectPage from '../project/UpdateProjectPage';
+import { PageIssues, Detailssue, PageOpenIssues } from '../issue';
 import PageTimelogs from '../timelog/PageTimelogs';
 import { PageTimesheet } from '../timesheet';
 import PageProjections from '../projection/PageProjections';
@@ -35,8 +37,17 @@ function Content() {
           <Route path={`${nav.dashboard.path}/:id`}>
             <DashboardProject />
           </Route>
+          <Route path={nav.create_project.path}>
+            <CreateProjectPage />
+          </Route>
+          <Route path={`${nav.update_project.path}/:id`}>
+            <UpdateProjectPage />
+          </Route>
           <Route path={nav.issues.path} >
             <PageIssues />
+          </Route>
+          <Route path={nav.open_issues.path} >
+            <PageOpenIssues />
           </Route>
           <Route path={`${nav.issue.path}/:id`} >
             <Detailssue />

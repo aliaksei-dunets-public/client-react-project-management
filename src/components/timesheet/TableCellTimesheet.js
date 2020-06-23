@@ -9,6 +9,7 @@ import TableCell from '@material-ui/core/TableCell';
 import Link from "react-router-dom/Link";
 import TextField from '@material-ui/core/TextField';
 import Hidden from '@material-ui/core/Hidden';
+import Tooltip from '@material-ui/core/Tooltip';
 
 import { CREATE_TIMELOG, UPDATE_TIMELOG, DELETE_TIMELOG } from '../../config/gqls';
 import { TimelogCacheUpdater } from '../../libs';
@@ -29,13 +30,19 @@ const useStyles = makeStyles(theme => ({
         borderStyle: 'solid',
         borderColor: 'rgb(224,224,224)',
     },
+    editCell: {
+        maxWidth: '60px',
+        minWidth: '50px'
+    },
     cell: {
         borderWidth: 1,
         borderStyle: 'solid',
         borderColor: 'rgb(224,224,224)',
     },
     weekendcell: {
-        background: '#f2f2f2',
+        borderWidth: 1,
+        borderStyle: 'solid',
+        borderColor: 'rgb(224,224,224)',
         opacity: 0.4,
     },
     totalcell: {
@@ -46,10 +53,15 @@ const useStyles = makeStyles(theme => ({
         fontWeight: 'bold',
         fontSize: '0.9rem'
     },
-    editCell: {
-        maxWidth: '50px',
-        minWidth: '24px'
-    },
+    totalweekendcelll: {
+        background: '#f4f5f5',
+        opacity: 0.4,
+        borderWidth: 1,
+        borderStyle: 'solid',
+        borderColor: 'rgb(224,224,224)',
+        fontWeight: 'bold',
+        fontSize: '0.9rem'
+    },    
     expand: {
         padding: '1px',
         transform: 'rotate(0deg)',
@@ -220,23 +232,23 @@ const EditCellTime = ({ project_id, issue_id, timelog, changedNotification }) =>
     }
 
     return (
-
-
-        <TableCell className={classes.cell} align="center" onDoubleClick={handleDoubleClick}>
-            {
-                editMode === false ?
-                    timelog.time !== 0 ? timelog.time : '-' :
-                    <TextField
-                        className={classes.editCell}
-                        variant="outlined"
-                        size="small"
-                        value={time}
-                        onChange={handleTimeChange}
-                        onBlur={handleBlur}
-                        autoFocus
-                    />
-            }
-        </TableCell>
+        <Tooltip title={timelog.descr ? timelog.descr : ''} >
+            <TableCell className={timelog.weekend ? classes.weekendcell : classes.cell} align="center" onDoubleClick={handleDoubleClick}>
+                {
+                    editMode === false ?
+                        timelog.time !== 0 ? timelog.time : '-' :
+                        <TextField
+                            className={classes.editCell}
+                            variant="outlined"
+                            size="small"
+                            value={time}
+                            onChange={handleTimeChange}
+                            onBlur={handleBlur}
+                            autoFocus
+                        />
+                }
+            </TableCell>
+        </Tooltip>
     );
 }
 
@@ -249,7 +261,7 @@ const TableCellProjectTimelog = ({ project_id, timeslots }) => {
                 timeslots.map((item) =>
                     <TableCell
                         key={`${project_id}-${item.date._d}`}
-                        className={classes.totalcell}
+                        className={item.weekend ? classes.totalweekendcelll : classes.totalcell}
                         align="center"
                     >
                         {item.time}

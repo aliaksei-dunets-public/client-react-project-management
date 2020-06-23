@@ -34,8 +34,8 @@ const CreateFormTimelog = ({ issue, handleCloseDialog }) => {
 
     const classes = styles();
 
-    const [startDate, setStartDate] = React.useState(moment());
-    const [endDate, setEndDate] = React.useState(moment());
+    const [startDate, setStartDate] = React.useState(moment.utc());
+    const [endDate, setEndDate] = React.useState(moment.utc());
     const [valueLog, setValueLog] = React.useState('');
     const [descr, setDescr] = React.useState('');
     const [isPeriod, setIsPeriod] = React.useState(false);

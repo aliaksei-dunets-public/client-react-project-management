@@ -13,6 +13,7 @@ import Hidden from '@material-ui/core/Hidden';
 import { nav } from '../../config/constants';
 import ExternalLinkComponent from '../common/ExternalLinkComponent';
 import StatusComponent from '../common/StatusComponent';
+import PriorityComponent from '../common/PriorityComponent';
 import TableRowActionComponent from '../common/TableRowActionComponent';
 import { UpdateIssue, DeleteIssue } from './';
 import DialogHandler from '../common/DialogHandler';
@@ -21,6 +22,12 @@ import DialogHandler from '../common/DialogHandler';
 const useStyles = makeStyles(theme => ({
     headerTable: {
         backgroundColor: 'rgba(224, 224, 224, 1)',
+    },
+    actionCell: {
+        minWidth: '100px'
+    },
+    descrCell: {
+        maxWidth: '600px'
     }
 }));
 
@@ -44,12 +51,17 @@ const TableIssues = ({ issues }) => {
                             <TableCell>Code</TableCell>
                             <TableCell>Summary</TableCell>
                             <Hidden smDown>
-                                <TableCell>Description</TableCell>
+                                <TableCell className={classes.descrCell}>Description</TableCell>
                             </Hidden>
                             <TableCell align="center">Status</TableCell>
                             <Hidden xsDown>
+                                <TableCell align="center">Priority</TableCell>
+                            </Hidden>
+                            <Hidden smDown>
                                 <TableCell align="center">External</TableCell>
-                                <TableCell align="center">Actions</TableCell>
+                            </Hidden>
+                            <Hidden xsDown>
+                                <TableCell className={classes.actionCell} align="center">Actions</TableCell>
                             </Hidden>
                         </TableRow>
                     </TableHead>
@@ -63,15 +75,22 @@ const TableIssues = ({ issues }) => {
                                 </TableCell>
                                 <TableCell>{row.summary}</TableCell>
                                 <Hidden smDown>
-                                    <TableCell>{row.descr}</TableCell>
+                                    <TableCell className={classes.descrCell}>{row.descr}</TableCell>
                                 </Hidden>
                                 <TableCell align="center">
                                     <StatusComponent status={row.status} />
                                 </TableCell>
                                 <Hidden xsDown>
                                     <TableCell align="center">
+                                        <PriorityComponent code={row.priority} />
+                                    </TableCell>
+                                </Hidden>
+                                <Hidden smDown>
+                                    <TableCell align="center">
                                         <ExternalLinkComponent url={row.external_url} code={row.external_code} />
                                     </TableCell>
+                                </Hidden>
+                                <Hidden xsDown>
                                     <TableCell align="center">
                                         <TableRowActionComponent
                                             row={row}

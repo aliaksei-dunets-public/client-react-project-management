@@ -1,6 +1,7 @@
 import {
     FRAGMENT,
     MESSAGE_BAR_LOCAL,
+    GET_PROJECT_SET,
     GET_ISSUE
 } from '../config/gqls';
 
@@ -16,6 +17,20 @@ const showMessageBar = (cache, severity, text) => {
         },
     });
 }
+
+class ProjectCacheUpdater {
+    created = (cache, { data: { createProject } }) => {
+        const { projects } = cache.readQuery({ query: GET_PROJECT_SET });
+        cache.writeQuery({
+            query: GET_PROJECT_SET,
+            data: { projects: projects.concat([createProject]) },
+        });
+
+        showMessageBar(cache, severity.success, `Project ${createProject.name} (${createProject.code}) was created successfully.`);
+    };
+}
+
+export const projectUpdater = new ProjectCacheUpdater();
 
 export class TimelogCacheUpdater {
     constructor(showMessage) {
@@ -89,4 +104,5 @@ export class TimelogCacheUpdater {
 
     }
 }
+
 
