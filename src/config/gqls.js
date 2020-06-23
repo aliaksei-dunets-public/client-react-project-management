@@ -122,11 +122,11 @@ const DELETE_PROJECT = gql`
 `;
 
 const GET_ISSUE_SET = gql`
-{
-    issues {
-        ...FragmentIssue
-    }  
-}
+    query getIssues($statuses: [IssueStatus]) {
+        issues(statuses: $statuses) {
+            ...FragmentIssue
+        }  
+    }
     ${FRAGMENT.fragments.ISSUE_COMMON}
 `;
 

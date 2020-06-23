@@ -38,7 +38,7 @@ const UpdateProjectPage = () => {
     const { id } = useParams();
 
     const handleClose = () => {
-        history.push(nav.projects.path);
+        history.goBack();
     }
 
     const handleSave = (updateProject, input) => {

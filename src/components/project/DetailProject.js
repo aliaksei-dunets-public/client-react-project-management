@@ -53,7 +53,7 @@ const DetailProject = () => {
                 variables={{ id }}
                 notifyOnNetworkStatusChange
             >
-                {({ loading, error, data}) => {
+                {({ loading, error, data }) => {
                     if (loading) return <LoadingComponent loading={loading} />;
                     if (error) return <ErrorServiceComponent error={error} />;
 
@@ -76,9 +76,15 @@ const DetailProject = () => {
                             <LabelValueComponent label='Status' >
                                 <StatusComponent status={data.project.status} />
                             </LabelValueComponent>
-                            <LabelValueComponent label='External' >
-                                <ExternalLinkComponent url={data.project.external_url} code={data.project.external_code} />
-                            </LabelValueComponent>
+
+                            {
+                                (data.project.external_url && data.project.external_code) ?
+                                    <LabelValueComponent label='External' >
+                                        <ExternalLinkComponent url={data.project.external_url} code={data.project.external_code} />
+                                    </LabelValueComponent>
+                                    : null
+                            }
+
                             <Hidden smUp>
                                 <Fab
                                     className={classes.fabEdit}
@@ -102,7 +108,7 @@ const DetailProject = () => {
                             <DialogUpdateComponent title={`Update project: ${data.project.code}`}>
                                 <UpdateProjectDialog project={data.project} handleCloseDialog={dialogUpdateHandler.hide} />
                             </DialogUpdateComponent>
-                            
+
                             <DialogDeleteComponent title={`Delete project: ${data.project.code}`}>
                                 <DeleteProjectDialog
                                     project={data.project}

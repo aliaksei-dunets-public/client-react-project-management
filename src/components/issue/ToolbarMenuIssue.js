@@ -1,6 +1,5 @@
 import React from 'react';
 import { useHistory } from "react-router-dom";
-import { Query } from "react-apollo";
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Menu from '@material-ui/core/Menu';
@@ -9,9 +8,6 @@ import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import Divider from '@material-ui/core/Divider';
 
 import { nav } from '../../config/constants';
-import { GET_PROJECT_SET } from '../../config/gqls';
-import LoadingComponent from '../common/LoadingComponent';
-import ErrorServiceComponent from '../common/ErrorServiceComponent';
 
 const useStyles = makeStyles((theme) => ({
     menuButton: {
@@ -44,7 +40,7 @@ const ToolbarMenuProject = () => {
                 onClick={handleClick}
                 endIcon={<KeyboardArrowDownIcon />}
             >
-                {nav.projects.name}
+                {nav.issues.name}
             </Button>
             <Menu
                 id="menu-projects"
@@ -53,52 +49,23 @@ const ToolbarMenuProject = () => {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
             >
-                <Query query={GET_PROJECT_SET}>
-                    {({ loading, error, data }) => {                        
-
-                        if (loading) return <LoadingComponent loading={loading} />;
-                        if (error) return <ErrorServiceComponent error={error} />;
-
-                        const activeProjects = data.projects.filter((item) => item.status === "ACTIVE");
-
-                        return (
-                            <>
-                                {
-                                    activeProjects.map((item) => (
-                                        <MenuItem
-                                            key={item.id}
-                                            onClick={() => {
-                                                handleClose();
-                                                history.push(`${nav.dashboard.path}/${item.id}`);
-                                            }}
-                                        >
-                                            {`${item.code} - ${item.name}`}
-                                        </MenuItem>
-                                    ))
-                                }
-                            </>
-                        );
-                    }}
-                </Query>
-
-                <Divider />
                 <MenuItem
                     onClick={() => {
                         handleClose();
-                        history.push(nav.create_project.path);
+                        history.push(nav.open_issues.path);
                     }}
                 >
-                    Create Project
+                    My open Issues
                 </MenuItem>
 
                 <Divider />
                 <MenuItem
                     onClick={() => {
                         handleClose();
-                        history.push(nav.projects.path);
+                        history.push(nav.issues.path);
                     }}
                 >
-                    View All Projects
+                    View All Issues
                 </MenuItem>
             </Menu>
         </>

@@ -17,11 +17,11 @@ const styles = makeStyles(theme => ({
             width: '400px',
         },
         [theme.breakpoints.down('sm')]: {
-            width: '250px',
+            width: '100%',
         },
     },
     buttons: {
-        width: '100%',
+        // width: '100%',
         display: 'flex',
         padding: theme.spacing(1),
         alignItems: 'center',

@@ -19,6 +19,7 @@ import { useHistory } from "react-router-dom";
 
 import { nav } from '../../config/constants';
 import ToolbarMenuProject from '../project/ToolbarMenuProject';
+import ToolbarMenuIssue from '../issue/ToolbarMenuIssue';
 
 // import MenuComponent from './MenuComponent';
 
@@ -27,7 +28,9 @@ const useStyles = makeStyles((theme) => ({
         marginBottom: theme.spacing(1),
     },
     menuButton: {
-        marginLeft: theme.spacing(2),
+        display: 'flex',
+        // alignItems: 'flex-end',
+        justifySelf: 'flex-end',
     },
     title: {
         flexGrow: 1,
@@ -63,13 +66,15 @@ export default function ToolbarComponent() {
 
                     <ToolbarMenuProject />
 
-                    <Button color="inherit" onClick={() => { history.push(nav.issues.path) }}>
+                    <ToolbarMenuIssue />
+
+                    {/* <Button color="inherit" onClick={() => { history.push(nav.issues.path) }}>
                         {nav.issues.name}
-                    </Button>
+                    </Button> */}
                     <Hidden xsDown>
-                        <Button color="inherit" onClick={() => { history.push(nav.timelogs.path) }}>
+                        {/* <Button color="inherit" onClick={() => { history.push(nav.timelogs.path) }}>
                             {nav.timelogs.name}
-                        </Button>
+                        </Button> */}
                         <Button color="inherit" onClick={() => { history.push(nav.timesheet.path) }}>
                             {nav.timesheet.name}
                         </Button>
@@ -91,16 +96,16 @@ export default function ToolbarComponent() {
                         </Button>
                     </Hidden>
                     <Hidden lgUp>
-                        <IconButton
-                            edge="start"
-                            className={classes.menuButton}
-                            color="inherit"
-                            aria-label="open drawer"
-                            onClick={handleClick}
-                        >
-                            <MenuIcon />
-                        </IconButton>
-
+                        <div className={classes.menuButton}>
+                            <IconButton
+                                edge="start"                                
+                                color="inherit"
+                                aria-label="open drawer"
+                                onClick={handleClick}
+                            >
+                                <MenuIcon />
+                            </IconButton>
+                        </div>
                         <Menu
                             id="mobileMenu"
                             anchorEl={anchorEl}
@@ -109,14 +114,14 @@ export default function ToolbarComponent() {
                             onClose={handleClose}
                         >
                             <Hidden smUp>
-                                <MenuItem
+                                {/* <MenuItem
                                     onClick={() => {
                                         handleClose();
                                         history.push(nav.timelogs.path);
                                     }}
                                 >
                                     {nav.timelogs.name}
-                                </MenuItem>
+                                </MenuItem> */}
 
                                 <MenuItem
                                     onClick={() => {
