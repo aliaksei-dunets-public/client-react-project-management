@@ -11,6 +11,7 @@ const useStyles = makeStyles(theme => ({
   appBarRoot: {
     flex: 1,
     backgroundColor: '#fafafa',
+    marginBottom: theme.spacing(1),
   },
   headerText: {
     color: 'rgba(0, 0, 0, 0.87)',

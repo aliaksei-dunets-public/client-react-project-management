@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import { Mutation } from '@apollo/react-components';
 import { makeStyles } from '@material-ui/core/styles';
 
-import FormProject from './FormProject';
+import FormIssue from './FormIssue';
 
-import { projectUpdater } from '../../libs';
-import { UPDATE_PROJECT } from '../../config/gqls';
+import { issueUpdater } from '../../libs';
+import { UPDATE_ISSUE } from '../../config/gqls';
 
 const styles = makeStyles(theme => ({
     root: {
@@ -19,7 +19,7 @@ const styles = makeStyles(theme => ({
     },
 }));
 
-const UpdateProjectDialog = ({ project, handleCloseDialog }) => {
+const UpdateIssueDialog = ({ issue, handleCloseDialog }) => {
 
     const classes = styles();
 
@@ -27,23 +27,23 @@ const UpdateProjectDialog = ({ project, handleCloseDialog }) => {
         handleCloseDialog();
     }
 
-    const handleSave = (input, updateProject) => {
-        updateProject({ variables: { id: project.id, input } });
+    const handleSave = (input, updateIssue) => {
+        updateIssue({ variables: { id: issue.id, input } });
         handleCloseDialog();
     }
 
     return (
         <Mutation
-            mutation={UPDATE_PROJECT}
-            key={project.id}
-            update={projectUpdater.updated}
+            mutation={UPDATE_ISSUE}
+            key={issue.id}
+            update={issueUpdater.updated}
         >
-            {(updateProject) => (
+            {(updateIssue) => (
                 <div className={classes.root}>
-                    <FormProject
-                        project={project}
+                    <FormIssue
+                        issue={issue}
                         cancelHandler={handleClose}
-                        saveHandler={(input) => { handleSave(input, updateProject) }}
+                        saveHandler={(input) => { handleSave(input, updateIssue) }}
                     />
                 </div>
             )}
@@ -51,9 +51,9 @@ const UpdateProjectDialog = ({ project, handleCloseDialog }) => {
     );
 }
 
-UpdateProjectDialog.propTypes = {
-    project: PropTypes.object.isRequired,
+UpdateIssueDialog.propTypes = {
+    issue: PropTypes.object.isRequired,
     handleCloseDialog: PropTypes.func.isRequired
 };
 
-export default UpdateProjectDialog;
+export default UpdateIssueDialog;

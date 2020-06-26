@@ -1,14 +1,15 @@
 import React from 'react';
 import { useMutation } from "@apollo/react-hooks";
-import { useHistory } from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
+import { useHistory } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
+import FormIssue from './FormIssue';
 import ToolbarDetailComponent from '../common/ToolbarDetailComponent';
-import FormProject from './FormProject';
 
 import { nav } from '../../config/constants';
-import { projectUpdater } from '../../libs';
-import { CREATE_PROJECT } from '../../config/gqls';
+import { issueUpdater } from '../../libs';
+import { CREATE_ISSUE } from '../../config/gqls';
 
 const styles = makeStyles(theme => ({
     root: {
@@ -28,16 +29,16 @@ const styles = makeStyles(theme => ({
     },
 }));
 
-const CreateProjectPage = () => {
+const CreateIssuePage = () => {
 
     const classes = styles();
-
     const history = useHistory();
+    const { project_id, external_url } = useParams();
 
-    const [createMutation] = useMutation(CREATE_PROJECT, { update: projectUpdater.created });
+    const [createMutation] = useMutation(CREATE_ISSUE, { update: issueUpdater.created });
 
     const handleClose = () => {
-        history.push(nav.projects.path);
+        history.push(`${nav.dashboard.path}/${project_id}`);
     }
 
     const handleSave = (input) => {
@@ -47,16 +48,14 @@ const CreateProjectPage = () => {
 
     return (
         <div className={classes.root}>
-            <div className={classes.container}>
-                <ToolbarDetailComponent title={`Create a new Project`} />
-                <FormProject
-                    project={{}}
-                    cancelHandler={handleClose}
-                    saveHandler={handleSave}
-                />
-            </div>
+            <ToolbarDetailComponent title={`Create a new Issue`} />
+            <FormIssue
+                issue={{ project_id, external_url: external_url ? decodeURIComponent(external_url) : '' }}
+                cancelHandler={handleClose}
+                saveHandler={handleSave}
+            />
         </div>
     );
 }
 
-export default CreateProjectPage;
+export default CreateIssuePage;

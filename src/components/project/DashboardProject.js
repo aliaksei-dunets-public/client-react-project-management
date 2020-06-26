@@ -1,17 +1,22 @@
 import React from 'react';
 import { useParams } from "react-router-dom";
 import { Query } from "react-apollo";
+import { useHistory } from "react-router-dom";
+import Hidden from '@material-ui/core/Hidden';
 
+import { nav } from '../../config/constants';
 import { GET_PROJECT_ISSUE_SET } from '../../config/gqls';
 import LoadingComponent from '../common/LoadingComponent';
 import ErrorServiceComponent from '../common/ErrorServiceComponent';
 import CreateDialogComponent from '../common/CreateDialogComponent';
-import TableIssues from '../issue/TableIssues';
-import CreateIssue from '../issue/CreateIssue';
+import CreateFabComponent from '../common/CreateFabComponent';
+import { TableIssues, CreateIssueDialog } from '../issue';
 
 const DashboardProject = () => {
 
     const { id } = useParams();
+
+    const history = useHistory();
 
     return (
         <>
@@ -20,39 +25,24 @@ const DashboardProject = () => {
                 variables={{ id }}
                 notifyOnNetworkStatusChange
             >
-                {({ loading, error, data, refetch, networkStatus }) => {
-                    if (networkStatus === 4) return 'Refetching!';
+                {({ loading, error, data }) => {
                     if (loading) return <LoadingComponent loading={loading} />;
                     if (error) return <ErrorServiceComponent error={error} />;
 
                     return (
                         <>
                             <TableIssues issues={data.project.issues} />
-                            <CreateDialogComponent title="Create a new issue">
-                                <CreateIssue project={data.project} />
-                            </CreateDialogComponent>
+
+                            <Hidden mdUp>
+                                <CreateFabComponent 
+                                    handleClick={() => history.push(`${nav.create_issue.path}/${data.project.id}/${encodeURIComponent(data.project.external_url)}`)} />
+                            </Hidden>
+                            <Hidden smDown>
+                                <CreateDialogComponent title="Create a new issue">
+                                    <CreateIssueDialog project={data.project} />
+                                </CreateDialogComponent>
+                            </Hidden>
                         </>
-                        // <div className={classes.root}>
-                        //     <List dense component="nav" aria-label="issues">
-                        //         {data.project.issues.map(row => (
-                        //             <>
-                        //                 <ListItem
-                        //                     key={row.id}
-                        //                     button
-                        //                     selected={selectedId === row.id}
-                        //                     onClick={() => { setSelectedId(row.id) }}
-                        //                 >
-                        //                     <ListItemText
-                        //                         primary={row.code}
-                        //                         secondary={row.summary}
-                        //                     />
-                        //                 </ListItem>
-                        //                 <Divider />
-                        //             </>
-                        //         )
-                        //         )}
-                        //     </List>                            
-                        // </div>
                     );
                 }}
             </Query>

@@ -35,15 +35,15 @@ const TableTimelogs = ({ timelogs }) => {
     return (
         <>
             <TableContainer component={Paper}>
-                <Table aria-label="simple table">
+                <Table size="small" aria-label="simple table">
                     <TableHead className={classes.headerTable}>
                         <TableRow>
                             <TableCell>Date</TableCell>
                             <TableCell align="center">Time, h</TableCell>
-                            <TableCell align="center">Description</TableCell>
                             <Hidden xsDown>
-                                <TableCell align="center">Actions</TableCell>
+                                <TableCell align="center">Description</TableCell>
                             </Hidden>
+                            <TableCell align="center">Actions</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -55,22 +55,23 @@ const TableTimelogs = ({ timelogs }) => {
                                     </Moment>
                                 </TableCell>
                                 <TableCell align="center">{row.valueLog}</TableCell>
-                                <TableCell align="center">{row.descr}</TableCell>
                                 <Hidden xsDown>
-                                    <TableCell align="center">
-                                        <TableRowActionComponent
-                                            row={row}
-                                            handleUpdate={() => {
-                                                setSelected(row);
-                                                dialogUpdateHandler.show();
-                                            }}
-                                            handleDelete={() => {
-                                                setSelected(row);
-                                                dialogDeleteHandler.show();
-                                            }}
-                                        />
-                                    </TableCell>
+                                    <TableCell align="center">{row.descr}</TableCell>
                                 </Hidden>
+                                <TableCell align="center">
+                                    <TableRowActionComponent
+                                        row={row}
+                                        handleUpdate={() => {
+                                            setSelected(row);
+                                            dialogUpdateHandler.show();
+                                        }}
+                                        handleDelete={() => {
+                                            setSelected(row);
+                                            dialogDeleteHandler.show();
+                                        }}
+                                    />
+                                </TableCell>
+
                             </TableRow>
                         ))}
                     </TableBody>

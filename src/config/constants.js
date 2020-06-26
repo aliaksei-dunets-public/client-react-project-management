@@ -1,31 +1,49 @@
 const STATUSES = {
+    // 10 - PROGRESS, 20 - NEW, 30 - HOLD, 40 - READY, 50 - CLOSED
     ACTIVE: {
         code: 'ACTIVE',
-        name: 'Active'
+        name: 'Active',
+        value: 1
     },
     INACTIVE: {
         code: 'INACTIVE',
-        name: 'Inactive'
+        name: 'Inactive',
+        value: 2
     },
     OBSOLETE: {
         code: 'OBSOLETE',
-        name: 'Obsolete'
+        name: 'Obsolete',
+        value: 3
     },
     NEW: {
         code: 'NEW',
-        name: 'New'
+        name: 'New',
+        value: 20
     },
     PROGRESS: {
         code: 'PROGRESS',
-        name: 'In Progress'
+        name: 'In Progress',
+        value: 10
     },
     CLOSED: {
         code: 'CLOSED',
-        name: 'Closed'
+        name: 'Closed',
+        value: 50
+    },
+    HOLD: {
+        code: 'HOLD',
+        name: 'On Hold',
+        value: 30
+    },
+    READY: {
+        code: 'READY',
+        name: 'Ready',
+        value: 40
     },
     DRAFT: {
         code: 'DRAFT',
-        name: 'Draft'
+        name: 'Draft',
+        value: 20
     }
 };
 
@@ -33,19 +51,23 @@ const PRIORITY = {
     // 1 - Critical, 2 - High, 3 - Medium, 4 - Low
     LOW: {
         code: 'LOW',
-        name: 'Low'
+        name: 'Low',
+        value: 4
     },
     MEDIUM: {
         code: 'MEDIUM',
-        name: 'Medium'
+        name: 'Medium',
+        value: 3
     },
     HIGH: {
         code: 'HIGH',
-        name: 'High'
+        name: 'High',
+        value: 2
     },
     CRITICAL: {
         code: 'CRITICAL',
-        name: 'Critical'
+        name: 'Critical',
+        value: 1
     },
 }
 
@@ -87,6 +109,14 @@ module.exports = {
             name: 'Issue',
             path: '/Issue'
         },
+        create_issue: {
+            name: 'Create Issue',
+            path: '/CreateIssue'
+        },
+        update_issue: {
+            name: 'Update Issue',
+            path: '/UpdateIssue'
+        },
         timelogs: {
             name: 'Timelogs',
             path: '/Timelogs'
@@ -122,6 +152,8 @@ module.exports = {
     issueStatuses: [
         STATUSES.NEW,
         STATUSES.PROGRESS,
+        STATUSES.READY,
+        STATUSES.HOLD,
         STATUSES.CLOSED
     ],
     issuePriority: [

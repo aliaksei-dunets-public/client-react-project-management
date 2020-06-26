@@ -11,7 +11,7 @@ import DetailProject from '../project/DetailProject';
 import DashboardProject from '../project/DashboardProject';
 import CreateProjectPage from '../project/CreateProjectPage';
 import UpdateProjectPage from '../project/UpdateProjectPage';
-import { PageIssues, Detailssue, PageOpenIssues } from '../issue';
+import { PageIssues, Detailssue, PageOpenIssues, CreateIssuePage, UpdateIssuePage } from '../issue';
 import PageTimelogs from '../timelog/PageTimelogs';
 import { PageTimesheet } from '../timesheet';
 import PageProjections from '../projection/PageProjections';
@@ -51,6 +51,12 @@ function Content() {
           </Route>
           <Route path={`${nav.issue.path}/:id`} >
             <Detailssue />
+          </Route>
+          <Route path={`${nav.create_issue.path}/:project_id/:external_url?`} >
+            <CreateIssuePage />
+          </Route>
+          <Route path={`${nav.update_issue.path}/:id`} >
+            <UpdateIssuePage />
           </Route>
           <Route path={nav.timelogs.path} >
             <PageTimelogs />

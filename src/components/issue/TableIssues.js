@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import { useTheme } from '@material-ui/core/styles';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { Link as LinkRouter } from "react-router-dom";
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -15,7 +17,7 @@ import ExternalLinkComponent from '../common/ExternalLinkComponent';
 import StatusComponent from '../common/StatusComponent';
 import PriorityComponent from '../common/PriorityComponent';
 import TableRowActionComponent from '../common/TableRowActionComponent';
-import { UpdateIssue, DeleteIssue } from './';
+import { UpdateIssueDialog, DeleteIssue } from './';
 import DialogHandler from '../common/DialogHandler';
 
 
@@ -34,6 +36,9 @@ const useStyles = makeStyles(theme => ({
 const TableIssues = ({ issues }) => {
     const classes = useStyles();
 
+    const theme = useTheme();
+    const matches = useMediaQuery(theme.breakpoints.down('xs'));
+
     const [selected, setSelected] = useState({});
 
     const dialogUpdateHandler = DialogHandler();
@@ -45,7 +50,7 @@ const TableIssues = ({ issues }) => {
     return (
         <>
             <TableContainer component={Paper}>
-                <Table aria-label="simple table">
+                <Table size={matches ? 'medium' : 'small'} aria-label="simple table">
                     <TableHead className={classes.headerTable}>
                         <TableRow>
                             <TableCell>Code</TableCell>
@@ -111,7 +116,7 @@ const TableIssues = ({ issues }) => {
                 </Table>
             </TableContainer>
             <DialogUpdateComponent title={`Update the issue - ${selected.summary}`}>
-                <UpdateIssue issue={selected} handleHide={dialogUpdateHandler.hide} />
+                <UpdateIssueDialog issue={selected} handleCloseDialog={dialogUpdateHandler.hide} />
             </DialogUpdateComponent>
             <DialogDeleteComponent title={`Delete the issue - ${selected.summary}`}>
                 <DeleteIssue issue={selected} handleHide={dialogDeleteHandler.hide} />
