@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Link as LinkRouter } from "react-router-dom";
 import { useHistory } from "react-router-dom";
+import { useTheme } from '@material-ui/core/styles';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -32,6 +34,9 @@ const TableProjects = ({ projects }) => {
     const classes = useStyles();
     const history = useHistory();
 
+    const theme = useTheme();
+    const matches = useMediaQuery(theme.breakpoints.down('xs'));
+
     const [selected, setSelected] = useState({});
 
     const dialogUpdateHandler = DialogHandler();
@@ -56,7 +61,7 @@ const TableProjects = ({ projects }) => {
     return (
         <>
             <TableContainer component={Paper}>
-                <Table aria-label="simple table">
+                <Table size={matches ? 'medium' : 'small'} aria-label="simple table">
                     <TableHead className={classes.headerTable}>
                         <TableRow>
                             <TableCell>Code</TableCell>

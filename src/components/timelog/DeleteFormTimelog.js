@@ -10,10 +10,12 @@ import { TimelogCacheUpdater } from '../../libs';
 
 const useStyles = makeStyles(theme => ({
     root: {
-        '& > *': {
-            margin: theme.spacing(1),
+        [theme.breakpoints.up('sm')]: {
+            width: '400px',
         },
-        width: 400,
+        [theme.breakpoints.down('sm')]: {
+            width: '100%',
+        },
     },
     buttons: {
         width: '100%',

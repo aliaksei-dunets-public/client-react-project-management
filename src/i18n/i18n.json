@@ -1,0 +1,11 @@
+{
+    "//Issue Block": "Issue Block",
+    "issueCreateDialogTitle": "Create a new Issue",
+    "issueUpdateDialogTitle": "Update the issue: &1",
+    "deleteUpdateDialogTitle": "Detele the issue: &1",
+
+    "errorMandatoryFields": "Fill out the mandatory fields!",
+    
+    "//Label Block": "Label Block",
+    "labelProject": "Project"
+}

@@ -73,7 +73,7 @@ const QueryTimesheet = ({ dates }) => {
     return (
         <div className={classes.root}>
             <TableContainer component={Paper}>
-                <Table className={classes.table} stickyHeader aria-label="simple table">
+                <Table className={classes.table} stickyHeader size='small' aria-label="simple table">
                     <TableHead>
                         <TableRow>
                             <TableCell className={classes.headerTable}>Tasks</TableCell>

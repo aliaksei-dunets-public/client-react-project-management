@@ -5,12 +5,12 @@ import { Mutation } from '@apollo/react-components';
 import { makeStyles } from '@material-ui/core/styles';
 
 import ToolbarDetailComponent from '../common/ToolbarDetailComponent';
-import FormProject from './FormProject';
+import FormIssue from './FormIssue';
 import LoadingComponent from '../common/LoadingComponent';
 import ErrorServiceComponent from '../common/ErrorServiceComponent';
 
-import { projectUpdater } from '../../libs';
-import { GET_PROJECT, UPDATE_PROJECT } from '../../config/gqls';
+import { issueUpdater } from '../../libs';
+import { GET_ISSUE, UPDATE_ISSUE } from '../../config/gqls';
 
 const styles = makeStyles(theme => ({
     root: {
@@ -30,7 +30,7 @@ const styles = makeStyles(theme => ({
     },
 }));
 
-const UpdateProjectPage = () => {
+const UpdateIssuePage = () => {
 
     const classes = styles();
 
@@ -41,14 +41,14 @@ const UpdateProjectPage = () => {
         history.goBack();
     }
 
-    const handleSave = (updateProject, input) => {
-        updateProject({ variables: { id, input } });
+    const handleSave = (updateIssue, input) => {
+        updateIssue({ variables: { id, input } });
     }
 
     return (
 
         <Query
-            query={GET_PROJECT}
+            query={GET_ISSUE}
             variables={{ id }}
         >
             {({ loading, error, data }) => {
@@ -58,30 +58,32 @@ const UpdateProjectPage = () => {
 
                 return (
                     <Mutation
-                        mutation={UPDATE_PROJECT}
-                        key={data.project.id}
-                        update={projectUpdater.updated}
+                        mutation={UPDATE_ISSUE}
+                        key={data.issue.id}
+                        update={issueUpdater.updated}
                     >
-                        {(updateProject) => (
+                        {
+                            (updateIssue) => (
 
-                            <div className={classes.root}>
-                                <div className={classes.container}>
-                                    <ToolbarDetailComponent title={`Update project - ${data.project.code}`} />
-                                    <FormProject
-                                        project={data.project}
-                                        cancelHandler={handleClose}
-                                        saveHandler={(input) => { handleSave(updateProject, input) }}
-                                    />
+                                <div className={classes.root}>
+                                    <div className={classes.container}>
+                                        <ToolbarDetailComponent title={`Update issue - ${data.issue.code}`} />
+                                        <FormIssue
+                                            issue={data.issue}
+                                            cancelHandler={handleClose}
+                                            saveHandler={(input) => { handleSave(updateIssue, input) }}
+                                        />
+                                    </div>
                                 </div>
-                            </div>
 
-                        )}
+                            )
+                        }
                     </Mutation>
                 );
             }}
-        </Query>
+        </Query >
 
     );
 }
 
-export default UpdateProjectPage;
+export default UpdateIssuePage;

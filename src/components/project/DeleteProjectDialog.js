@@ -3,16 +3,13 @@ import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import DialogContentText from '@material-ui/core/DialogContentText';
-
 import { useMutation } from '@apollo/react-hooks';
-import { severity } from '../../config/constants';
-import { MESSAGE_BAR_LOCAL, GET_PROJECT_SET, DELETE_PROJECT } from '../../config/gqls';
+
+import { projectUpdater } from '../../libs';
+import { DELETE_PROJECT } from '../../config/gqls';
 
 const styles = makeStyles(theme => ({
     root: {
-        '& > *': {
-            margin: theme.spacing(1),
-        },
         [theme.breakpoints.up('sm')]: {
             width: '400px',
         },
@@ -35,26 +32,10 @@ export default function DeleteProjectDialog({ project, handleHide }) {
 
     const [deleteProject] = useMutation(DELETE_PROJECT);
 
-    const updateCache = (cache) => {
-        const { projects } = cache.readQuery({ query: GET_PROJECT_SET });
-        cache.writeQuery({
-            query: GET_PROJECT_SET,
-            data: { projects: projects.filter((item) => project.id !== item.id) }
-        });
-        cache.writeQuery({
-            query: MESSAGE_BAR_LOCAL,
-            data: {
-                messageBarOpen: true,
-                messageBarSeverity: severity.success,
-                messageBarText: `Project ${project.name} (${project.code}) was deleted successfully.`,
-            },
-        });
-    };
-
     const handleDelete = () => {
         deleteProject({
             variables: { id: project.id, deleteChild: true },
-            update: updateCache,
+            update: projectUpdater.deleted,
         });
         handleHide(true);
     }

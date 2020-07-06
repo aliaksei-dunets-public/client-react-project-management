@@ -24,15 +24,17 @@ const StatusComponent = ({ status }) => {
     const getClasses = () => {
         switch (status) {
             case statuses.ACTIVE.code:
-            case statuses.PROGRESS.code:
+            case statuses.READY.code:
                 return classes.positive;
 
             case statuses.NEW.code:
+            case statuses.PROGRESS.code:
             case statuses.DRAFT.code:
             case statuses.INACTIVE.code:
                 return classes.warning;
 
-            case statuses.CLOSED.code:
+            // case statuses.CLOSED.code:
+            case statuses.HOLD.code:
             case statuses.OBSOLETE.code:
                 return classes.error;
 

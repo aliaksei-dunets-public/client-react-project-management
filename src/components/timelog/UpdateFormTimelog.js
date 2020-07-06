@@ -16,7 +16,12 @@ const styles = makeStyles(theme => ({
         '& > *': {
             margin: theme.spacing(1),
         },
-        width: 400,
+        [theme.breakpoints.up('sm')]: {
+            width: '500px',
+        },
+        [theme.breakpoints.down('sm')]: {
+            width: '250px',
+        },
     },
     buttons: {
         width: '100%',

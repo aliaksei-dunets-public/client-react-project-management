@@ -1,7 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import Hidden from '@material-ui/core/Hidden';
+import { useHistory } from "react-router-dom";
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
@@ -9,14 +8,16 @@ import Fab from '@material-ui/core/Fab';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 
+import { nav } from '../../config/constants';
+import ToolbarDetailComponent from '../common/ToolbarDetailComponent';
 import LabelValueComponent from '../common/LabelValueComponent';
 import StatusComponent from '../common/StatusComponent';
+import PriorityComponent from '../common/PriorityComponent';
 import ExternalLinkComponent from '../common/ExternalLinkComponent';
 import CreateDialogComponent from '../common/CreateDialogComponent';
-import { UpdateIssue, DeleteIssue } from '.';
+import { DeleteIssue } from '.';
 import DialogHandler from '../common/DialogHandler';
 import { TableTimelogs, CreateFormTimelog } from '../timelog';
-import { assertNullableType } from 'graphql';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -41,14 +42,13 @@ const useStyles = makeStyles((theme) => ({
 const DetailssueTabs = ({ issue }) => {
 
     const classes = useStyles();
+    const history = useHistory();
+
     const [value, setValue] = React.useState(0);
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
-
-    const dialogUpdateHandler = DialogHandler();
-    const DialogUpdateComponent = dialogUpdateHandler.component;
 
     const dialogDeleteHandler = DialogHandler();
     const DialogDeleteComponent = dialogDeleteHandler.component;
@@ -65,6 +65,9 @@ const DetailssueTabs = ({ issue }) => {
                         <LabelValueComponent label='Status' >
                             <StatusComponent status={issue.status} />
                         </LabelValueComponent>
+                        <LabelValueComponent label='Priority' >
+                            <PriorityComponent code={issue.priority} />
+                        </LabelValueComponent>
                         {
                             (issue.external_url && issue.external_code) ?
                                 <LabelValueComponent label='External' >
@@ -73,18 +76,20 @@ const DetailssueTabs = ({ issue }) => {
                                 : null
                         }
 
-                        <DialogUpdateComponent title={`Update issue - ${issue.code}`}>
-                            <UpdateIssue issue={issue} handleHide={dialogUpdateHandler.hide} />
-                        </DialogUpdateComponent>
                         <DialogDeleteComponent title={`Delete issue - ${issue.code}`}>
-                            <DeleteIssue issue={issue} handleHide={dialogDeleteHandler.hide} />
+                            <DeleteIssue
+                                issue={issue}
+                                handleHide={(wasDeleted) => {
+                                    dialogDeleteHandler.hide();
+                                    if (wasDeleted) history.goBack();
+                                }} />
                         </DialogDeleteComponent>
                         <Fab
                             className={classes.fabEdit}
                             size="medium"
                             color="primary"
                             aria-label="edit"
-                            onClick={dialogUpdateHandler.show}
+                            onClick={() => history.push(`${nav.update_issue.path}/${issue.id}`)}
                         >
                             <EditIcon />
                         </Fab>
@@ -99,7 +104,6 @@ const DetailssueTabs = ({ issue }) => {
                         </Fab>
                     </div>
                 );
-                break;
 
             case 1:
                 return (
@@ -111,16 +115,15 @@ const DetailssueTabs = ({ issue }) => {
 
                     </div>
                 );
-                break;
-            // default:
-            //     return ( 'History of the Task');
-            //     break;
+            default:
+                return (null);
         }
 
     }
 
     return (
         <>
+            <ToolbarDetailComponent title={`Issue: ${issue.code}`} />
             <AppBar position="static" color="default">
                 <Tabs
                     value={value}
@@ -130,7 +133,7 @@ const DetailssueTabs = ({ issue }) => {
                     variant="fullWidth"
                     centered
                 >
-                    <Tab label="Issue" />
+                    <Tab label="Details" />
                     <Tab label="Timelogs" />
                     {/* <Tab label="History" /> */}
                 </Tabs>

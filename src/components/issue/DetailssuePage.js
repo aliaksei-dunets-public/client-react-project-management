@@ -1,14 +1,14 @@
 import React from 'react';
-import { useParams } from "react-router-dom";
 import Button from '@material-ui/core/Button';
 import Hidden from '@material-ui/core/Hidden';
 
 import ToolbarDetailComponent from '../common/ToolbarDetailComponent';
 import LabelValueComponent from '../common/LabelValueComponent';
 import StatusComponent from '../common/StatusComponent';
+import PriorityComponent from '../common/PriorityComponent';
 import ExternalLinkComponent from '../common/ExternalLinkComponent';
 import CreateDialogComponent from '../common/CreateDialogComponent';
-import { UpdateIssue, DeleteIssue } from '.';
+import { UpdateIssueDialog, DeleteIssue } from '.';
 import DialogHandler from '../common/DialogHandler';
 import { TableTimelogs, CreateFormTimelog } from '../timelog';
 
@@ -39,6 +39,9 @@ const DetailssuePage = ({ issue }) => {
             <LabelValueComponent label='Status' >
                 <StatusComponent status={issue.status} />
             </LabelValueComponent>
+            <LabelValueComponent label='Priority' >
+                <PriorityComponent code={issue.priority} />
+            </LabelValueComponent>
             {
                 (issue.external_url && issue.external_code) ?
                     <LabelValueComponent label='External' >
@@ -48,7 +51,7 @@ const DetailssuePage = ({ issue }) => {
             }
 
             <DialogUpdateComponent title={`Update the issue - ${issue.summary}`}>
-                <UpdateIssue issue={issue} handleHide={dialogUpdateHandler.hide} />
+                <UpdateIssueDialog issue={issue} handleCloseDialog={dialogUpdateHandler.hide} />
             </DialogUpdateComponent>
             <DialogDeleteComponent title={`Delete the issue - ${issue.summary}`}>
                 <DeleteIssue issue={issue} handleHide={dialogDeleteHandler.hide} />
