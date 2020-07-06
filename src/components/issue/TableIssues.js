@@ -12,6 +12,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Hidden from '@material-ui/core/Hidden';
 
+import i18n from '../../i18n';
 import { nav } from '../../config/constants';
 import ExternalLinkComponent from '../common/ExternalLinkComponent';
 import StatusComponent from '../common/StatusComponent';
@@ -115,10 +116,10 @@ const TableIssues = ({ issues }) => {
                     </TableBody>
                 </Table>
             </TableContainer>
-            <DialogUpdateComponent title={`Update the issue - ${selected.summary}`}>
+            <DialogUpdateComponent title={i18n.parseText('issueUpdateDialogTitle', [selected.code])}>
                 <UpdateIssueDialog issue={selected} handleCloseDialog={dialogUpdateHandler.hide} />
             </DialogUpdateComponent>
-            <DialogDeleteComponent title={`Delete the issue - ${selected.summary}`}>
+            <DialogDeleteComponent title={i18n.parseText('deleteUpdateDialogTitle', [selected.code])}>
                 <DeleteIssue issue={selected} handleHide={dialogDeleteHandler.hide} />
             </DialogDeleteComponent>
         </>

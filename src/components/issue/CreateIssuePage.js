@@ -7,6 +7,7 @@ import { useParams } from "react-router-dom";
 import FormIssue from './FormIssue';
 import ToolbarDetailComponent from '../common/ToolbarDetailComponent';
 
+import i18n from '../../i18n';
 import { nav } from '../../config/constants';
 import { issueUpdater } from '../../libs';
 import { CREATE_ISSUE } from '../../config/gqls';
@@ -38,7 +39,7 @@ const CreateIssuePage = () => {
     const [createMutation] = useMutation(CREATE_ISSUE, { update: issueUpdater.created });
 
     const handleClose = () => {
-        history.push(`${nav.dashboard.path}/${project_id}`);
+        project_id ? history.push(`${nav.dashboard.path}/${project_id}`) : history.push(`${nav.issues.path}`);
     }
 
     const handleSave = (input) => {
@@ -48,12 +49,14 @@ const CreateIssuePage = () => {
 
     return (
         <div className={classes.root}>
-            <ToolbarDetailComponent title={`Create a new Issue`} />
-            <FormIssue
-                issue={{ project_id, external_url: external_url ? decodeURIComponent(external_url) : '' }}
-                cancelHandler={handleClose}
-                saveHandler={handleSave}
-            />
+            <div className={classes.container}>
+                <ToolbarDetailComponent title={i18n.getText('issueCreateDialogTitle')} />
+                <FormIssue
+                    issue={{ project_id, external_url: external_url ? decodeURIComponent(external_url) : '' }}
+                    cancelHandler={handleClose}
+                    saveHandler={handleSave}
+                />
+            </div>
         </div>
     );
 }

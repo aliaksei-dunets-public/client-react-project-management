@@ -52,6 +52,17 @@ const ToolbarMenuProject = () => {
                 <MenuItem
                     onClick={() => {
                         handleClose();
+                        history.push(nav.create_issue.path);
+                    }}
+                >
+                    Create an Issue
+                </MenuItem>
+
+                <Divider />
+
+                <MenuItem
+                    onClick={() => {
+                        handleClose();
                         history.push(nav.open_issues.path);
                     }}
                 >
@@ -59,6 +70,7 @@ const ToolbarMenuProject = () => {
                 </MenuItem>
 
                 <Divider />
+
                 <MenuItem
                     onClick={() => {
                         handleClose();

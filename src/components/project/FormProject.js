@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
@@ -6,8 +6,8 @@ import Button from '@material-ui/core/Button';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 
-
 import { projectStatuses } from '../../config/constants';
+import ErrorPanelComponent from '../common/ErrorPanelComponent';
 
 const styles = makeStyles(theme => ({
     form: {
@@ -20,7 +20,7 @@ const styles = makeStyles(theme => ({
     buttons: {
         width: '100%',
         display: 'flex',
-        justifyContent: 'flex-end',        
+        justifyContent: 'flex-end',
         '& > *': {
             margin: theme.spacing(1),
         },
@@ -31,12 +31,13 @@ const FormProject = ({ project, cancelHandler, saveHandler }) => {
 
     const classes = styles();
 
-    const [code, setCode] = React.useState(project.code || '');
-    const [name, setName] = React.useState(project.name || '');
-    const [descr, setDescr] = React.useState(project.descr || '');
-    const [status, setStatus] = React.useState(project.status || projectStatuses[0].code);
-    const [external_code, setExternalCode] = React.useState(project.external_code || '');
-    const [external_url, setExternalUrl] = React.useState(project.external_url || '');
+    const [open, setOpen] = useState(false);
+    const [code, setCode] = useState(project.code || '');
+    const [name, setName] = useState(project.name || '');
+    const [descr, setDescr] = useState(project.descr || '');
+    const [status, setStatus] = useState(project.status || projectStatuses[0].code);
+    const [external_code, setExternalCode] = useState(project.external_code || '');
+    const [external_url, setExternalUrl] = useState(project.external_url || '');
 
     const handleChange = (event) => {
         switch (event.target.name) {
@@ -64,6 +65,12 @@ const FormProject = ({ project, cancelHandler, saveHandler }) => {
     }
 
     const handleSave = () => {
+
+        if (!code || !name) {
+            setOpen(true);
+            return;
+        }
+
         saveHandler({
             code,
             name,
@@ -79,6 +86,8 @@ const FormProject = ({ project, cancelHandler, saveHandler }) => {
     return (
         <>
             <FormControl className={classes.form}>
+                <ErrorPanelComponent open={open} setOpen={setOpen} />
+
                 <TextField
                     id="code"
                     name="code"

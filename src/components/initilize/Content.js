@@ -52,7 +52,7 @@ function Content() {
           <Route path={`${nav.issue.path}/:id`} >
             <Detailssue />
           </Route>
-          <Route path={`${nav.create_issue.path}/:project_id/:external_url?`} >
+          <Route path={`${nav.create_issue.path}/:project_id?/:external_url?`} >
             <CreateIssuePage />
           </Route>
           <Route path={`${nav.update_issue.path}/:id`} >
