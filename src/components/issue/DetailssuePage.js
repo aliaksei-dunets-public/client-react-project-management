@@ -32,7 +32,6 @@ const DetailssuePage = ({ issue }) => {
                     </Button>
                 </Hidden>
             </ToolbarDetailComponent>
-            {/* <LabelValueComponent label='ID' value={issue.id} /> */}
             <LabelValueComponent label='Code' value={issue.code} />
             <LabelValueComponent label='Summary' value={issue.summary} />
             <LabelValueComponent label='Description' value={issue.descr} />

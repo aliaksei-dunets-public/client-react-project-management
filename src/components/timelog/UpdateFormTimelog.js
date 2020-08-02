@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
@@ -10,6 +10,7 @@ import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/picker
 
 import { Mutation } from '@apollo/react-components';
 import { UPDATE_TIMELOG } from '../../config/gqls';
+import ErrorPanelComponent from '../common/ErrorPanelComponent';
 
 const styles = makeStyles(theme => ({
     root: {
@@ -36,9 +37,10 @@ const UpdateFormTimelog = ({ timelog, handleHide }) => {
 
     const classes = styles();
 
-    const [dateLog, setDateLog] = React.useState(timelog.dateLog);
-    const [valueLog, setValueLog] = React.useState(timelog.valueLog);
-    const [descr, setDescr] = React.useState(timelog.descr);
+    const [open, setOpen] = useState(false);
+    const [dateLog, setDateLog] = useState(timelog.dateLog);
+    const [valueLog, setValueLog] = useState(timelog.valueLog);
+    const [descr, setDescr] = useState(timelog.descr);
 
     moment.updateLocale("en", {
         week: {
@@ -47,6 +49,12 @@ const UpdateFormTimelog = ({ timelog, handleHide }) => {
     });
 
     const handleSave = async (callMutation) => {
+
+        if (!valueLog) {
+            setOpen(true);
+            return;
+        }
+
         callMutation({
             variables: {
                 id: timelog.id,
@@ -81,6 +89,9 @@ const UpdateFormTimelog = ({ timelog, handleHide }) => {
             {(callMutation) => (
                 <>
                     <FormControl className={classes.root}>
+
+                        <ErrorPanelComponent open={open} setOpen={setOpen} />
+
                         <TextField
                             id="valueLog"
                             name="valueLog"
