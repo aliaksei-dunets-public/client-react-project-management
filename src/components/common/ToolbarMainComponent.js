@@ -63,23 +63,14 @@ export default function ToolbarComponent() {
                     <Button color="inherit" onClick={() => { history.push(nav.home.path) }}>
                         {nav.home.name}
                     </Button>
-
                     <ToolbarMenuProject />
-
                     <ToolbarMenuIssue />
-
-                    {/* <Button color="inherit" onClick={() => { history.push(nav.issues.path) }}>
-                        {nav.issues.name}
-                    </Button> */}
                     <Hidden xsDown>
-                        {/* <Button color="inherit" onClick={() => { history.push(nav.timelogs.path) }}>
-                            {nav.timelogs.name}
-                        </Button> */}
                         <Button color="inherit" onClick={() => { history.push(nav.timesheet.path) }}>
                             {nav.timesheet.name}
                         </Button>
                     </Hidden>
-                    <Hidden smDown>
+                    {/* <Hidden smDown>
                         <Button color="inherit" onClick={() => { history.push(nav.projections.path) }}>
                             {nav.projections.name}
                         </Button>
@@ -94,7 +85,7 @@ export default function ToolbarComponent() {
                         <Button color="inherit" onClick={() => { history.push(nav.tasks.path) }}>
                             {nav.tasks.name}
                         </Button>
-                    </Hidden>
+                    </Hidden> */}
                     <Hidden lgUp>
                         <div className={classes.menuButton}>
                             <IconButton
@@ -114,15 +105,6 @@ export default function ToolbarComponent() {
                             onClose={handleClose}
                         >
                             <Hidden smUp>
-                                {/* <MenuItem
-                                    onClick={() => {
-                                        handleClose();
-                                        history.push(nav.timelogs.path);
-                                    }}
-                                >
-                                    {nav.timelogs.name}
-                                </MenuItem> */}
-
                                 <MenuItem
                                     onClick={() => {
                                         handleClose();
@@ -133,7 +115,7 @@ export default function ToolbarComponent() {
                                 </MenuItem>
                             </Hidden>
 
-                            <Hidden mdUp>
+                            {/* <Hidden mdUp>
                                 <MenuItem
                                     onClick={() => {
                                         handleClose();
@@ -169,7 +151,7 @@ export default function ToolbarComponent() {
                                 }}
                             >
                                 {nav.tasks.name}
-                            </MenuItem>
+                            </MenuItem> */}
                         </Menu>
 
                         {/* <BottomNavigation

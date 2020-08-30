@@ -6,7 +6,7 @@ import Button from '@material-ui/core/Button';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 
-import i18n from '../../i18n';
+// import i18n from '../../i18n';
 import { issueStatuses, issuePriority } from '../../config/constants';
 import AutocompleteProject from '../project/AutocompleteProject';
 import ErrorPanelComponent from '../common/ErrorPanelComponent';

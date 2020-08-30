@@ -17,6 +17,7 @@ import ExternalLinkComponent from '../common/ExternalLinkComponent';
 import CreateDialogComponent from '../common/CreateDialogComponent';
 import { DeleteIssue } from '.';
 import DialogHandler from '../common/DialogHandler';
+import { TableSubIssues } from '../subIssue';
 import { TableTimelogs, CreateFormTimelog } from '../timelog';
 
 const useStyles = makeStyles((theme) => ({
@@ -57,6 +58,22 @@ const DetailssueTabs = ({ issue }) => {
 
         switch (value) {
             case 0:
+                return (
+                    <div className={classes.content}>
+                        <TableSubIssues issue_id={issue.id} project_id={issue.project_id} subIssues={issue.subIssues} />
+                    </div>
+                );
+            case 1:
+                return (
+                    <div className={classes.content}>
+                        <TableTimelogs timelogs={issue.timelogs} />
+                        <CreateDialogComponent title="Create a new timelog">
+                            <CreateFormTimelog issue={issue} />
+                        </CreateDialogComponent>
+
+                    </div>
+                );
+            case 2:
                 return (
                     <div className={classes.content}>
                         <LabelValueComponent label='Code' value={issue.code} />
@@ -104,17 +121,6 @@ const DetailssueTabs = ({ issue }) => {
                         </Fab>
                     </div>
                 );
-
-            case 1:
-                return (
-                    <div className={classes.content}>
-                        <TableTimelogs timelogs={issue.timelogs} />
-                        <CreateDialogComponent title="Create a new timelog">
-                            <CreateFormTimelog issue={issue} />
-                        </CreateDialogComponent>
-
-                    </div>
-                );
             default:
                 return (null);
         }
@@ -133,8 +139,9 @@ const DetailssueTabs = ({ issue }) => {
                     variant="fullWidth"
                     centered
                 >
-                    <Tab label="Details" />
+                    <Tab label="Tasks" />
                     <Tab label="Timelogs" />
+                    <Tab label="Details" />
                     {/* <Tab label="History" /> */}
                 </Tabs>
             </AppBar>

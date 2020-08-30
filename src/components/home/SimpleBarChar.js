@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useQuery } from '@apollo/react-hooks';
 import { makeStyles } from '@material-ui/core/styles';
+import { useHistory } from "react-router-dom";
 import {
     ResponsiveContainer,
     BarChart,
@@ -11,8 +12,10 @@ import {
     Tooltip,
     Legend,
 } from 'recharts';
+import Typography from '@material-ui/core/Typography';
 import moment from 'moment';
 
+import { nav } from '../../config/constants';
 import { TIMESHEET_SET } from '../../config/gqls';
 import { generateSimpleBarChart } from '../../libs';
 import {
@@ -36,17 +39,23 @@ const styles = makeStyles(theme => ({
             height: 280
         },
     },
+    title :{
+        marginLeft: theme.spacing(4)
+    }
 }));
 
 const SimpleBarChart = () => {
-
+    
+    const history = useHistory();
     const classes = styles();
 
     const [legend, setLegend] = useState([]);
     const [barChar, setBarChar] = useState([]);
 
-    const startDate = moment().startOf('isoWeek').format('YYYY-MM-DD');
-    const endDate = moment().endOf('isoWeek').format('YYYY-MM-DD');
+    const startOfWeek = moment().startOf('isoWeek');
+    const endOfWeek = moment().endOf('isoWeek');
+    const startDate = startOfWeek.format('YYYY-MM-DD');
+    const endDate = endOfWeek.format('YYYY-MM-DD');
 
     const { loading, error, data } = useQuery(
         TIMESHEET_SET,
@@ -66,10 +75,11 @@ const SimpleBarChart = () => {
 
     return (
         <div className={classes.root}>
+            <Typography className={classes.title} variant="h6" color="primary">
+                {`Total time ${startOfWeek.format('DD MMM, ddd')} - ${endOfWeek.format('DD MMM, ddd')}`}
+            </Typography>
             <ResponsiveContainer>
                 <BarChart
-                    // width={600}
-                    // height={500}
                     data={barChar}
                     margin={{
                         top: 10, right: 5, left: 5, bottom: 5,
@@ -88,7 +98,7 @@ const SimpleBarChart = () => {
                                 dataKey={item.key}
                                 name={item.legend}
                                 fill={item.fill}
-                            // onClick={(data, index) => { console.log(data) }}
+                                onClick={(data, index) => { history.push(nav.timesheet.path) }}
                             />
                         ))
                     }

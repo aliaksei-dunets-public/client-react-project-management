@@ -3,4 +3,5 @@ export {
     TimelogCacheUpdater,
     projectUpdater,
     issueUpdater,
+    subIssueUpdater,
 } from './updater';

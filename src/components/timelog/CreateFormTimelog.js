@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
@@ -13,6 +13,7 @@ import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/picker
 import { useMutation } from "@apollo/react-hooks";
 import { CREATE_TIMELOG, CREATE_MULTI_TIMELOG } from '../../config/gqls';
 import { TimelogCacheUpdater } from '../../libs';
+import ErrorPanelComponent from '../common/ErrorPanelComponent';
 
 const styles = makeStyles(theme => ({
     root: {
@@ -38,12 +39,13 @@ const styles = makeStyles(theme => ({
 const CreateFormTimelog = ({ issue, handleCloseDialog }) => {
 
     const classes = styles();
-
-    const [startDate, setStartDate] = React.useState(moment.utc());
-    const [endDate, setEndDate] = React.useState(moment.utc());
-    const [valueLog, setValueLog] = React.useState('');
-    const [descr, setDescr] = React.useState('');
-    const [isPeriod, setIsPeriod] = React.useState(false);
+    
+    const [open, setOpen] = useState(false);
+    const [startDate, setStartDate] = useState(moment.utc());
+    const [endDate, setEndDate] = useState(moment.utc());
+    const [valueLog, setValueLog] = useState('');
+    const [descr, setDescr] = useState('');
+    const [isPeriod, setIsPeriod] = useState(false);
 
     const updaterTimelog = new TimelogCacheUpdater(true);
 
@@ -68,6 +70,11 @@ const CreateFormTimelog = ({ issue, handleCloseDialog }) => {
     }
 
     const handleSave = () => {
+
+        if (!valueLog) {
+            setOpen(true);
+            return;
+        }
 
         if (isPeriod) {
             const arrayBody = [];
@@ -134,6 +141,9 @@ const CreateFormTimelog = ({ issue, handleCloseDialog }) => {
     return (
         <>
             <FormControl className={classes.root}>
+
+                <ErrorPanelComponent open={open} setOpen={setOpen} />
+
                 <TextField
                     id="valueLog"
                     name="valueLog"
