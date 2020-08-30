@@ -42,6 +42,17 @@ FRAGMENT.fragments = {
             external_url  
         }     
     `,
+    SUB_ISSUE_COMMON: gql`
+        fragment FragmentSubIssue on SubIssue {
+            id
+            project_id
+            issue_id
+            summary
+            descr
+            status
+            priority 
+        }     
+    `,
     TIMELOG_COMMON: gql`
         fragment FragmentTimelog on Timelog {
             id
@@ -137,10 +148,14 @@ const GET_ISSUE = gql`
             timelogs {
             ...FragmentTimelog
             }
+            subIssues {
+            ...FragmentSubIssue
+            }
         }  
     }
     ${FRAGMENT.fragments.ISSUE_COMMON}
     ${FRAGMENT.fragments.TIMELOG_COMMON}
+    ${FRAGMENT.fragments.SUB_ISSUE_COMMON}
 `;
 
 const CREATE_ISSUE = gql`
@@ -167,6 +182,35 @@ const DELETE_ISSUE = gql`
             id
             project_id
             code
+            summary
+        }
+    }
+`;
+
+const CREATE_SUB_ISSUE = gql`
+    mutation createSubIssue($input:SubIssueCreate) {
+        createSubIssue(input:$input) {
+            ...FragmentSubIssue
+        }        
+    }
+    ${FRAGMENT.fragments.SUB_ISSUE_COMMON}
+`;
+
+const UPDATE_SUB_ISSUE = gql`
+    mutation updateSubIssue($id:ID!, $input:SubIssueEdit) {
+        updateSubIssue(id:$id, input:$input) {
+            ...FragmentSubIssue
+        }        
+    }
+    ${FRAGMENT.fragments.SUB_ISSUE_COMMON}
+`;
+
+const DELETE_SUB_ISSUE = gql`
+    mutation deleteSubIssue($id:ID!) {
+        deleteSubIssue(id:$id) {
+            id
+            project_id
+            issue_id
             summary
         }
     }
@@ -254,6 +298,9 @@ export {
     CREATE_ISSUE,
     UPDATE_ISSUE,
     DELETE_ISSUE,
+    CREATE_SUB_ISSUE,
+    UPDATE_SUB_ISSUE,
+    DELETE_SUB_ISSUE,
     GET_TIMELOG_SET,
     CREATE_TIMELOG,
     CREATE_MULTI_TIMELOG,

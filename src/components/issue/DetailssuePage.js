@@ -11,6 +11,7 @@ import CreateDialogComponent from '../common/CreateDialogComponent';
 import { UpdateIssueDialog, DeleteIssue } from '.';
 import DialogHandler from '../common/DialogHandler';
 import { TableTimelogs, CreateFormTimelog } from '../timelog';
+import { TableSubIssues } from '../subIssue';
 
 const DetailssuePage = ({ issue }) => {
 
@@ -56,7 +57,9 @@ const DetailssuePage = ({ issue }) => {
                 <DeleteIssue issue={issue} handleHide={dialogDeleteHandler.hide} />
             </DialogDeleteComponent>
 
+            <TableSubIssues issue_id={issue.id} project_id={issue.project_id} subIssues={issue.subIssues}/>
             <TableTimelogs timelogs={issue.timelogs} />
+            
             <CreateDialogComponent title="Create a new timelog">
                 <CreateFormTimelog issue={issue} />
             </CreateDialogComponent>

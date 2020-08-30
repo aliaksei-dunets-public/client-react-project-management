@@ -25,11 +25,6 @@ const sortByFieldAsc = (a, b) => {
     return a > b ? 1 : -1;
 }
 
-// const sortByFieldDesc = (a, b) => {
-//     if (a === b) return 0;
-//     return a > b ? -1 : 1;
-// }
-
 class ProjectCacheUpdater {
 
     _sortProjects(a, b) {
@@ -77,9 +72,9 @@ class ProjectCacheUpdater {
 class IssueCacheUpdater {
 
     _sortIssues(a, b) {
-        return sortByFieldAsc(statuses[a.status].value, statuses[b.status].value) || 
-               sortByFieldAsc(priority[a.priority].value, priority[b.priority].value) || 
-               sortByFieldAsc(a.code, b.code);
+        return sortByFieldAsc(statuses[a.status].value, statuses[b.status].value) ||
+            sortByFieldAsc(priority[a.priority].value, priority[b.priority].value) ||
+            sortByFieldAsc(a.code, b.code);
     }
 
     created = (cache, { data: { createIssue } }) => {
@@ -99,7 +94,7 @@ class IssueCacheUpdater {
 
         try {
             const { project } = cache.readQuery({ query: GET_PROJECT_ISSUE_SET, variables: { id: createIssue.project_id } });
-            
+
             const newProject = { ...project };
             const newIssues = project.issues.concat(createIssue);
             newIssues.sort(this._sortIssues);
@@ -132,7 +127,7 @@ class IssueCacheUpdater {
 
         try {
             const { project } = cache.readQuery({ query: GET_PROJECT_ISSUE_SET, variables: { id: updateIssue.project_id } });
-            
+
             const newProject = { ...project };
             newProject.issues.sort(this._sortIssues);
 
@@ -175,8 +170,59 @@ class IssueCacheUpdater {
     };
 }
 
-export const projectUpdater = new ProjectCacheUpdater();
-export const issueUpdater = new IssueCacheUpdater();
+export class SubIssueCacheUpdater {
+    constructor(showMessage) {
+        this.showMessage = showMessage;
+    }
+
+    created = (cache, { data: { createSubIssue } }) => {
+        try {
+            const { issue } = cache.readQuery({ query: GET_ISSUE, variables: { id: createSubIssue.issue_id } });
+            const newIssue = { ...issue };
+            newIssue.subIssues = issue.subIssues.concat(createSubIssue);
+            cache.writeQuery({
+                query: GET_ISSUE,
+                data: { issue: newIssue }
+            });
+        } catch (error) {
+
+        }
+
+        if (this.showMessage) showMessageBar(cache, severity.success, `Task was created successfully.`);
+    }
+
+    updated = (cache, { data: { updateSubIssue } }) => {
+        try {
+            cache.writeFragment({
+                id: updateSubIssue.id,
+                fragment: FRAGMENT.fragments.SUB_ISSUE_COMMON,
+                data: {
+                    ...updateSubIssue,
+                    __typename: "SubIssue"
+                }
+            });
+        } catch (error) {
+
+        }
+    }
+
+    deleted = (cache, { data: { deleteSubIssue } }) => {
+        try {
+            const { issue } = cache.readQuery({ query: GET_ISSUE, variables: { id: deleteSubIssue.issue_id } });
+            const newIssue = { ...issue };
+            newIssue.subIssues = issue.subIssues.filter((item) => deleteSubIssue.id !== item.id);
+            cache.writeQuery({
+                query: GET_ISSUE,
+                data: { issue: newIssue }
+            });
+        } catch (error) {
+
+        }
+
+        if (this.showMessage) showMessageBar(cache, severity.success, `Task was deleted successfully.`);
+
+    }
+}
 
 export class TimelogCacheUpdater {
     constructor(showMessage) {
@@ -250,5 +296,9 @@ export class TimelogCacheUpdater {
 
     }
 }
+
+export const projectUpdater = new ProjectCacheUpdater();
+export const issueUpdater = new IssueCacheUpdater();
+export const subIssueUpdater = new SubIssueCacheUpdater(true);
 
 
