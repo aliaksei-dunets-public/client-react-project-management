@@ -282,6 +282,14 @@ const TIMESHEET_SET = gql`
     ${FRAGMENT.fragments.TIMELOG_COMMON}
 `;
 
+const REPORT = gql`
+    query getReport {
+        report {
+            filename
+        }  
+    }
+`;
+
 export {
     MESSAGE_BAR_LOCAL,
     IS_LOGGED_IN,
@@ -307,4 +315,5 @@ export {
     UPDATE_TIMELOG,
     DELETE_TIMELOG,
     TIMESHEET_SET,
+    REPORT
 }

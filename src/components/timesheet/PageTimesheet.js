@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
+import Button from '@material-ui/core/Button';
 import moment from 'moment';
+import { useLazyQuery } from '@apollo/react-hooks';
 
-import { DateRangePickerComponent } from '../common';
+import { DateRangePickerComponent, LoadingComponent } from '../common';
 import { QueryTimesheet } from './';
+import { REPORT } from '../../config/gqls';
 
 export default () => {
 
@@ -18,9 +21,18 @@ export default () => {
         });
     };
 
+    const [openReport, { loading, data }] = useLazyQuery(REPORT);
+
+    if (loading) return <LoadingComponent loading={loading} />;
+
+    if (data && data.report) {
+        window.open(data.report.filename, '_blank');
+    }
+
     return (
         <>
             <DateRangePickerComponent setDateRangeFilter={handleChangeDateRange} />
+            <Button color="primary" onClick={openReport}>Primary</Button>
             <QueryTimesheet dates={dates} />
         </>
 
