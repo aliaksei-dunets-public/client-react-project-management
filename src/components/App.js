@@ -12,7 +12,7 @@ const cache = new InMemoryCache();
 
 const client = new ApolloClient({
   cache,
-  uri: process.env.REACT_APP_SERVER_URI || 'http://localhost:3005/graphql',
+  uri: ( process.env.REACT_APP_SERVER_URI || 'http://localhost:3005') + '/graphql',
   headers: {
     Authorization: localStorage.getItem('auth_server_token')
   },
