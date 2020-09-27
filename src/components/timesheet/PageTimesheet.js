@@ -26,7 +26,7 @@ export default () => {
     if (loading) return <LoadingComponent loading={loading} />;
 
     if (data && data.report) {
-        window.open(data.report.filename, '_blank');
+        window.open(`http://localhost:3005/static/${data.report.filename}`, 'PDF Report');
     }
 
     return (
