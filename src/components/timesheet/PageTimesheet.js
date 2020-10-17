@@ -44,7 +44,7 @@ export default () => {
     if (loading) return <LoadingComponent loading={loading} />;
 
     if (data && data.report && openReport) {
-        window.open(`${process.env.REACT_APP_SERVER_URI || 'http://localhost:3005/'}static/${data.report.filename}`, 'PDF Report');
+        window.open(`${process.env.REACT_APP_SERVER_URI || 'http://localhost:3005'}/static/${data.report.filename}`, 'PDF Report');
         setOpenReport(false);
     }
 
