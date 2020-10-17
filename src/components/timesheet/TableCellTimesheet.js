@@ -43,7 +43,7 @@ const useStyles = makeStyles(theme => ({
         borderWidth: 1,
         borderStyle: 'solid',
         borderColor: 'rgb(224,224,224)',
-        opacity: 0.4,
+        opacity: 0.6,
     },
     totalcell: {
         background: '#f4f5f5',
@@ -55,13 +55,13 @@ const useStyles = makeStyles(theme => ({
     },
     totalweekendcelll: {
         background: '#f4f5f5',
-        opacity: 0.4,
+        opacity: 0.6,
         borderWidth: 1,
         borderStyle: 'solid',
         borderColor: 'rgb(224,224,224)',
         fontWeight: 'bold',
         fontSize: '0.9rem'
-    },    
+    },
     expand: {
         padding: '1px',
         transform: 'rotate(0deg)',
@@ -74,6 +74,14 @@ const useStyles = makeStyles(theme => ({
         padding: '1px',
         transform: 'rotate(180deg)',
     },
+    paidTime: {
+        color: 'green',
+        fontSize: '0.9rem'
+    },
+    noPaidTime: {
+        color: 'red',
+        fontSize: '0.9rem'
+    }
 }));
 
 const TableCellTimesheet = ({ projects, changedNotification }) => {
@@ -221,6 +229,7 @@ const EditCellTime = ({ project_id, issue_id, timelog, changedNotification }) =>
                             issue_id,
                             dateLog: timelog.date,
                             valueLog: parseFloat(time),
+                            paidUp: true
                         }
                     }
                 });
@@ -231,12 +240,28 @@ const EditCellTime = ({ project_id, issue_id, timelog, changedNotification }) =>
         }
     }
 
+    const ReadOnlyTime = ({ timelog }) => {
+        if (timelog.time) {
+            return (
+                <div className={timelog.paidUp ? classes.paidTime : classes.noPaidTime}>
+                    {timelog.time}
+                </div>
+            );
+        } else {
+            return <div>{'-'}</div>;
+        }
+    }
+
     return (
         <Tooltip title={timelog.descr ? timelog.descr : ''} >
-            <TableCell className={timelog.weekend ? classes.weekendcell : classes.cell} align="center" onDoubleClick={handleDoubleClick}>
+            <TableCell
+                className={timelog.weekend ? classes.weekendcell : classes.cell}
+                align="center"
+                onDoubleClick={handleDoubleClick}
+            >
                 {
                     editMode === false ?
-                        timelog.time !== 0 ? timelog.time : '-' :
+                        <ReadOnlyTime timelog={timelog} /> :
                         <TextField
                             className={classes.editCell}
                             variant="outlined"

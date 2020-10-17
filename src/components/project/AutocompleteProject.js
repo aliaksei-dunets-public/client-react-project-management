@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const AutocompleteProject = ({ isError, setProjectId, setExternalUrl }) => {
+const AutocompleteProject = ({ isError, setProjectId, setExternalUrl = (data) => { return; } }) => {
 
     const classes = useStyles();
 
@@ -45,14 +45,14 @@ const AutocompleteProject = ({ isError, setProjectId, setExternalUrl }) => {
                         <>
                             <Autocomplete
                                 className={classes.option}
-                                id="autocomplete_project"
+                                id="autocomplete_project"                                
                                 options={activeProjects}
                                 getOptionLabel={option => `${option.code}: ${option.name}`}
                                 onChange={(event, param) => { handleSelectProject(param) }}
                                 renderInput={params => (
                                     <TextField
                                         {...params}
-                                        label={i18n.getText('labelProject')}
+                                        label={i18n.getText('labelProject')}                                        
                                         fullWidth
                                         required
                                         error={isError}
@@ -68,9 +68,9 @@ const AutocompleteProject = ({ isError, setProjectId, setExternalUrl }) => {
 }
 
 AutocompleteProject.propTypes = {
-    isError: PropTypes.bool.isRequired, 
+    isError: PropTypes.bool.isRequired,
     setProjectId: PropTypes.func.isRequired,
-    setExternalUrl: PropTypes.func.isRequired,
+    setExternalUrl: PropTypes.func,
 };
 
 export default AutocompleteProject;

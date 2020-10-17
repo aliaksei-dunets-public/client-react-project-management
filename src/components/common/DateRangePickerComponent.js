@@ -19,10 +19,10 @@ const styles = makeStyles(theme => ({
     buttonGroup: {
     },
     button: {
-            padding: theme.spacing(1),
-
+        padding: theme.spacing(1),
     },
     buttonDate: {
+        fontSize: '1.2rem',
     },
 }));
 
@@ -31,7 +31,7 @@ const DateRangePickerComponent = (props) => {
     const classes = styles();
 
     const [startDate, setStartDate] = useState(moment().startOf('isoWeek'));
-    const [endDate, setEndDate] = useState(moment().endOf('isoWeek'));
+    const [endDate, setEndDate] = useState(moment().endOf('isoWeek').hour(0).minute(0).second(0));
 
     const handleDateRangePickerApply = (event, datePicker) => {
         _setStateDatePicker(datePicker.startDate, datePicker.endDate);

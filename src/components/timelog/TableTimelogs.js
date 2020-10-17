@@ -17,6 +17,12 @@ import { DeleteFormTimelog, UpdateFormTimelog } from './';
 const useStyles = makeStyles(theme => ({
     headerTable: {
         backgroundColor: 'rgba(224, 224, 224, 1)',
+    },
+    paidTime: {
+        color: 'green'
+    },
+    noPaidTime: {
+        color: 'red'
     }
 }));
 
@@ -54,7 +60,12 @@ const TableTimelogs = ({ timelogs }) => {
                                         {row.dateLog}
                                     </Moment>
                                 </TableCell>
-                                <TableCell align="center">{row.valueLog}</TableCell>
+                                <TableCell
+                                    className={row.paidUp ? classes.paidTime : classes.noPaidTime}
+                                    align="center"
+                                >
+                                    {row.valueLog}
+                                </TableCell>
                                 <Hidden xsDown>
                                     <TableCell align="center">{row.descr}</TableCell>
                                 </Hidden>

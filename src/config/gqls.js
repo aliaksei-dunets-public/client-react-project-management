@@ -61,6 +61,7 @@ FRAGMENT.fragments = {
             dateLog
             valueLog
             descr
+            paidUp
         }
     `,
 }
@@ -264,8 +265,8 @@ const DELETE_TIMELOG = gql`
 `;
 
 const TIMESHEET_SET = gql`
-    query getTimesheet($startDate:Date,$endDate:Date) {
-        timesheet(startDate:$startDate,endDate:$endDate) {
+    query getTimesheet($startDate:Date,$endDate:Date,$project_id: String) {
+        timesheet(startDate:$startDate,endDate:$endDate,project_id:$project_id) {
             projects {
                 ...FragmentProject
             }
@@ -280,6 +281,14 @@ const TIMESHEET_SET = gql`
     ${FRAGMENT.fragments.PROJECT_COMMON}
     ${FRAGMENT.fragments.ISSUE_COMMON}
     ${FRAGMENT.fragments.TIMELOG_COMMON}
+`;
+
+const REPORT = gql`
+    query getReport {
+        report {
+            filename
+        }  
+    }
 `;
 
 export {
@@ -307,4 +316,5 @@ export {
     UPDATE_TIMELOG,
     DELETE_TIMELOG,
     TIMESHEET_SET,
+    REPORT
 }

@@ -112,7 +112,7 @@ export class Aggregator {
             const difCount = this.endDate.diff(this.startDate, 'days');
             for (let i = 0; i <= difCount; i++) {
                 this.timeslots.push(new TimeslotBase(localStartDate));
-                localStartDate.add(1, 'days');                
+                localStartDate.add(1, 'days');
             }
         }
 
@@ -277,9 +277,10 @@ class TimeslotBase extends TimeBase {
     /**
      * @param {Object} timelog - instance of the Timeslot   
      */
-    collectTimelog({ id, time, descr }) {
+    collectTimelog({ id, time, descr, paidUp }) {
         this.id = id;
         this.descr = descr;
+        this.paidUp = paidUp;
         this.addTime(time);
     }
 
@@ -356,7 +357,9 @@ class ProjectModel extends ModelBase {
 
             if (this.timeslots.length !== 0) {
                 const timeslot = this.timeslots.find(slot => slot.isSameDate(element.date));
-                timeslot.collectTime(element.time);
+                if (timeslot) {
+                    timeslot.collectTime(element.time);
+                }
             }
         });
     }
@@ -396,7 +399,9 @@ class IssueModel extends ModelBase {
 
             if (this.timeslots.length !== 0) {
                 const timeslot = this.timeslots.find(slot => slot.isSameDate(element.date));
-                timeslot.collectTimelog(element);
+                if (timeslot) {
+                    timeslot.collectTimelog(element);
+                }
             }
         });
     }
@@ -414,12 +419,13 @@ class TimelogModel extends TimeslotBase {
     /**
      * @param {Object} timelog - Object from API
      */
-    constructor({ id, project_id, issue_id, dateLog, valueLog, descr }) {
+    constructor({ id, project_id, issue_id, dateLog, valueLog, descr, paidUp }) {
         super(dateLog, valueLog);
         this.id = id;
         this.project_id = project_id;
         this.issue_id = issue_id;
         this.descr = descr;
+        this.paidUp = paidUp;
     }
 }
 
