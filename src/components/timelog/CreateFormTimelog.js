@@ -3,8 +3,10 @@ import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import FormGroup from '@material-ui/core/FormGroup';
 import FormControl from '@material-ui/core/FormControl';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Switch from '@material-ui/core/Switch';
 import Checkbox from '@material-ui/core/Checkbox';
 import moment from 'moment';
 import MomentUtils from '@date-io/moment';
@@ -39,13 +41,14 @@ const styles = makeStyles(theme => ({
 const CreateFormTimelog = ({ issue, handleCloseDialog }) => {
 
     const classes = styles();
-    
+
     const [open, setOpen] = useState(false);
     const [startDate, setStartDate] = useState(moment.utc());
     const [endDate, setEndDate] = useState(moment.utc());
     const [valueLog, setValueLog] = useState('');
     const [descr, setDescr] = useState('');
     const [isPeriod, setIsPeriod] = useState(false);
+    const [paidUp, setPaidUp] = useState(true);
 
     const updaterTimelog = new TimelogCacheUpdater(true);
 
@@ -89,7 +92,8 @@ const CreateFormTimelog = ({ issue, handleCloseDialog }) => {
                     issue_id: issue.id,
                     valueLog: parseFloat(valueLog),
                     dateLog: start.clone().add(i, 'days'),
-                    descr
+                    descr,
+                    paidUp
                 });
             }
 
@@ -108,6 +112,7 @@ const CreateFormTimelog = ({ issue, handleCloseDialog }) => {
                         dateLog: moment(startDate),
                         valueLog: parseFloat(valueLog),
                         descr,
+                        paidUp
                     }
                 }
             });
@@ -121,17 +126,14 @@ const CreateFormTimelog = ({ issue, handleCloseDialog }) => {
             case 'isPeriod':
                 setIsPeriod(event.target.checked);
                 break;
-            // case 'startDate':
-            //     setStartdDate(event.target.value);
-            //     break;
-            // case 'endDate':
-            //     setEndDate(event.target.value);
-            //     break;
             case 'valueLog':
                 setValueLog(event.target.value);
                 break;
             case 'descr':
                 setDescr(event.target.value);
+                break;
+            case 'paidUp':
+                setPaidUp(event.target.checked);
                 break;
             default:
                 break;
@@ -156,17 +158,30 @@ const CreateFormTimelog = ({ issue, handleCloseDialog }) => {
                     required
                     fullWidth
                 />
-                <FormControlLabel
-                    control={
-                        <Checkbox
-                            checked={isPeriod}
-                            onChange={handleChange}
-                            name="isPeriod"
-                            color="primary"
-                        />
-                    }
-                    label="Log Time for Period"
-                />
+                <FormGroup row>
+                    <FormControlLabel
+                        control={
+                            <Checkbox
+                                checked={isPeriod}
+                                onChange={handleChange}
+                                name="isPeriod"
+                                color="primary"
+                            />
+                        }
+                        label="Log Time for Period"
+                    />
+                    <FormControlLabel
+                        control={
+                            <Switch
+                                checked={paidUp}
+                                onChange={handleChange}
+                                name="paidUp"
+                                color="primary"
+                            />
+                        }
+                        label="Time is paid"
+                    />
+                </FormGroup>
                 <MuiPickersUtilsProvider libInstance={moment} utils={MomentUtils}>
                     <KeyboardDatePicker
                         margin="normal"

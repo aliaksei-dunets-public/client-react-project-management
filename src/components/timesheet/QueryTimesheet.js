@@ -45,7 +45,7 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const QueryTimesheet = ({ dates }) => {
+const QueryTimesheet = ({ dates, project_id }) => {
 
     const classes = useStyles();
 
@@ -55,7 +55,10 @@ const QueryTimesheet = ({ dates }) => {
     const { loading, error, data, refetch, networkStatus } = useQuery(
         TIMESHEET_SET,
         {
-            variables: dates,
+            variables: {
+                ...dates,
+                project_id
+            },
             fetchPolicy: 'no-cache',
             notifyOnNetworkStatusChange: true,
             onCompleted: () => {

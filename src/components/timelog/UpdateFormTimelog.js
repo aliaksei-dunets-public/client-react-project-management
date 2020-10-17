@@ -3,7 +3,10 @@ import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import FormGroup from '@material-ui/core/FormGroup';
 import FormControl from '@material-ui/core/FormControl';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Switch from '@material-ui/core/Switch';
 import moment from 'moment';
 import MomentUtils from '@date-io/moment';
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
@@ -41,6 +44,7 @@ const UpdateFormTimelog = ({ timelog, handleHide }) => {
     const [dateLog, setDateLog] = useState(timelog.dateLog);
     const [valueLog, setValueLog] = useState(timelog.valueLog);
     const [descr, setDescr] = useState(timelog.descr);
+    const [paidUp, setPaidUp] = useState(timelog.paidUp);
 
     moment.updateLocale("en", {
         week: {
@@ -64,6 +68,7 @@ const UpdateFormTimelog = ({ timelog, handleHide }) => {
                     dateLog,
                     valueLog: parseFloat(valueLog),
                     descr,
+                    paidUp
                 }
             }
         })
@@ -78,6 +83,9 @@ const UpdateFormTimelog = ({ timelog, handleHide }) => {
                 break;
             case 'descr':
                 setDescr(event.target.value);
+                break;
+            case 'paidUp':
+                setPaidUp(event.target.checked);
                 break;
             default:
                 break;
@@ -104,6 +112,19 @@ const UpdateFormTimelog = ({ timelog, handleHide }) => {
                             required
                             fullWidth
                         />
+                        <FormGroup row>
+                            <FormControlLabel
+                                control={
+                                    <Switch
+                                        checked={paidUp}
+                                        onChange={handleChange}
+                                        name="paidUp"
+                                        color="primary"
+                                    />
+                                }
+                                label="Time is paid"
+                            />
+                        </FormGroup>
                         <MuiPickersUtilsProvider libInstance={moment} utils={MomentUtils}>
                             <KeyboardDatePicker
                                 margin="normal"
