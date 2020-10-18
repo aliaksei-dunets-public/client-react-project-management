@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
-import Button from '@material-ui/core/Button';
-import moment from 'moment';
-import { useLazyQuery } from '@apollo/react-hooks';
+import Hidden from '@material-ui/core/Hidden';
 import { makeStyles } from '@material-ui/core/styles';
+import moment from 'moment';
 
-import { DateRangePickerComponent, LoadingComponent } from '../common';
+import { DateRangePickerComponent } from '../common';
 import AutocompleteProject from '../project/AutocompleteProject';
-import { QueryTimesheet } from './';
-import { REPORT } from '../../config/gqls';
+import { QueryTimesheet, DownloadPDFTimesheet } from './';
 
 const styles = makeStyles(theme => ({
     root: {
@@ -30,7 +28,6 @@ export default () => {
     })
 
     const [project_id, setProjectId] = useState('');
-    const [openReport, setOpenReport] = useState(false);
 
     const handleChangeDateRange = (filterOptions) => {
         setDates({
@@ -39,26 +36,19 @@ export default () => {
         });
     };
 
-    const [loadReport, { loading, data }] = useLazyQuery(REPORT, { fetchPolicy: "no-cache" });
-
-    if (loading) return <LoadingComponent loading={loading} />;
-
-    if (data && data.report && openReport) {
-        window.open(`${process.env.REACT_APP_SERVER_URI || 'http://localhost:3005'}/static/${data.report.filename}`, 'PDF Report');
-        setOpenReport(false);
-    }
-
     return (
         <>
             <div className={classes.root}>
-                <div className={classes.project}>
-                    <AutocompleteProject
-                        isError={false}
-                        setProjectId={setProjectId}
-                    />
-                </div>
+                <Hidden xsDown>
+                    <div className={classes.project}>
+                        <AutocompleteProject
+                            isError={false}
+                            setProjectId={setProjectId}
+                        />
+                    </div>
+                </Hidden>
                 <DateRangePickerComponent setDateRangeFilter={handleChangeDateRange} />
-                <Button color="primary" onClick={() => { setOpenReport(true); loadReport(); }}>Download Report</Button>
+                <DownloadPDFTimesheet startDate={dates.startDate} endDate={dates.endDate} project_id={project_id} />
             </div>
             <QueryTimesheet dates={dates} project_id={project_id} />
         </>

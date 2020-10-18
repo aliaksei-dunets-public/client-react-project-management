@@ -9,7 +9,7 @@ import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import DateRangePicker from 'react-bootstrap-daterangepicker';
 
-const DISPLAY_FORMAT = 'DD.MM.YYYY';
+const DISPLAY_FORMAT = 'DD.MM.YY';
 const LABEL_TODAY = 'Today';
 const LABEL_WEEK = 'Week';
 const LABEL_TWO_WEEKS = 'Two Weeks';
