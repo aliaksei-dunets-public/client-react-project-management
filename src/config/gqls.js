@@ -284,8 +284,8 @@ const TIMESHEET_SET = gql`
 `;
 
 const REPORT = gql`
-    query getReport {
-        report {
+    query getReport($startDate:Date,$endDate:Date,$project_id: String) {
+        report(startDate:$startDate,endDate:$endDate,project_id:$project_id) {
             filename
         }  
     }

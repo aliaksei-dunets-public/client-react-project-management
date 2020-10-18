@@ -76,7 +76,7 @@ const SimpleBarChart = () => {
     return (
         <div className={classes.root}>
             <Typography className={classes.title} variant="h6" color="primary">
-                {`Total time ${startOfWeek.format('DD MMM, ddd')} - ${endOfWeek.format('DD MMM, ddd')}`}
+                {`Week Time, h: ${startOfWeek.format('DD MMM')} - ${endOfWeek.format('DD MMM')}`}
             </Typography>
             <ResponsiveContainer>
                 <BarChart

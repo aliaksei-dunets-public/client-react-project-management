@@ -56,7 +56,7 @@ const TableTimelogs = ({ timelogs }) => {
                         {timelogs.map(row => (
                             <TableRow key={row.id} onClick={() => { setSelected(row) }}>
                                 <TableCell component="th" scope="row">
-                                    <Moment format="DD.MM.YYYY">
+                                    <Moment format="DD MMM YYYY, dddd">
                                         {row.dateLog}
                                     </Moment>
                                 </TableCell>
